@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/relay
+    username: relay
+    password: relay
+  jpa:
+    hibernate:
+      ddl-auto: validate

@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    active: test
+  datasource:
+    url: jdbc:postgresql://localhost:5433/relay_test
+    username: relay_test
+    password: relay_test
+  jpa:
+    hibernate:
+      ddl-auto: validate
