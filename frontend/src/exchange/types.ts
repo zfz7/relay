@@ -1,3 +1,4 @@
-export interface HelloWorldDTO {
-  message: string,
+export interface Peer {
+  id: string,
+  expiration: Date
 }
