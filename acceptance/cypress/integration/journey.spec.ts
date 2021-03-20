@@ -19,9 +19,8 @@ describe('app', () => {
       expect(xhr.response!.statusCode).to.eql(201)
     })
     cy.findByText("download").click()
-    cy.reload()
     cy.wait('@downloadPeer').should(xhr => {
-      expect(xhr.response!.statusCode).to.eql(406)
+      expect(xhr.response!.statusCode).to.eql(200)
     })
   })
 })

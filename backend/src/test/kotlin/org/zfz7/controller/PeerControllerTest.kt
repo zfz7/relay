@@ -1,4 +1,5 @@
 package org.zfz7.controller
+
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.mockk.every
 import io.mockk.mockkStatic
@@ -15,6 +16,7 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.zfz7.domain.Peer
 import org.zfz7.exchange.PeerDTO
 import org.zfz7.repository.PeerRepository
 import java.time.Instant
@@ -46,15 +48,50 @@ class PeerControllerTest {
     val now = Instant.now()
     mockkStatic(Instant::class)
     every { Instant.now() } returns now
-    val result = mockMvc.perform(MockMvcRequestBuilders.post("/api/peer")
-        .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isCreated)
-        .andReturn()
+    val result = mockMvc.perform(
+      MockMvcRequestBuilders.post("/api/peer")
+        .contentType(MediaType.APPLICATION_JSON)
+    )
+      .andExpect(status().isCreated)
+      .andReturn()
 
     val response = objectMapper.readValue(result.response.contentAsByteArray, PeerDTO::class.java)
     assertThat(response.id).isNotNull
     assertThat(response.expiration).isEqualTo(now.plus(30, ChronoUnit.DAYS))
 
     assertThat(peerRepository.findAll().size).isEqualTo(1)
+  }
+
+  @Test
+  @DisplayName("Get peer's config file")
+  fun getPeerConfig() {
+    var peer = Peer(
+      address = "10.8.0.3/24,fd42:42:42::3/64",
+      dns = "10.8.0.1,fd42:42:42::1",
+      privateKey = "ABC",
+      allowedIps = "0.0.0.0/0,::/0",
+      endPoint = "relay.zfz7.org:51820",
+      preSharedKey = "DEF",
+      publicKey = "GHI"
+    )
+    peer = peerRepository.save(peer)
+    val fileResponse = mockMvc.perform(
+      MockMvcRequestBuilders.get("/api/peer/${peer.publicId}")
+        .contentType(MediaType.TEXT_PLAIN)
+    )
+      .andExpect(status().isOk)
+      .andReturn().response
+
+    assertThat(fileResponse.headerNames).contains("Content-Disposition")
+    assertThat(fileResponse.getHeaderValue("Content-Disposition").toString()).contains("relay.conf")
+    assertThat(fileResponse.contentAsString).contains("[Interface]")
+    assertThat(fileResponse.contentAsString).contains("Address = 10.8.0.3/24,fd42:42:42::3/64")
+    assertThat(fileResponse.contentAsString).contains("DNS = 10.8.0.1,fd42:42:42::1")
+    assertThat(fileResponse.contentAsString).contains("PrivateKey = ABC")
+    assertThat(fileResponse.contentAsString).contains("[Peer]")
+    assertThat(fileResponse.contentAsString).contains("AllowedIPs = 0.0.0.0/0,::/0")
+    assertThat(fileResponse.contentAsString).contains("Endpoint = relay.zfz7.org:51820")
+    assertThat(fileResponse.contentAsString).contains("PresharedKey = DEF")
+    assertThat(fileResponse.contentAsString).contains("PublicKey = GHI")
   }
 }
