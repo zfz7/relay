@@ -9,7 +9,7 @@ describe('app', () => {
     cy.resetDatabase()
   })
 
-  it('lets users downlaod a new connection file', () => {
+  it('lets users download a new connection file', () => {
     cy.visit('/')
     expect(cy.contains('Relay')).exist
     expect(cy.contains('A secure connection')).exist
