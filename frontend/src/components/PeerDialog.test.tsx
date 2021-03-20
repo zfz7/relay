@@ -18,7 +18,7 @@ describe('PeerCreation', () => {
     render(<PeerDialog peer={peer} open={true} onClose={jest.fn()} onConfirm={jest.fn()}/>);
     const title = screen.getByText(/secure connection/);
     expect(title).toBeInTheDocument();
-    const expiration = screen.getByText(/Sun Apr 10 2021/);
+    const expiration = screen.getByText(/Sun Apr 19 2021/);
     expect(expiration).toBeInTheDocument();
 
   })
