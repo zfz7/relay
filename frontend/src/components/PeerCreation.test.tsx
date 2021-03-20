@@ -41,6 +41,5 @@ describe('PeerCreation', () => {
       await downloadPeerMock
     })
     expect(downloadPeerMock).toHaveBeenCalledTimes(1)
-    // expect(container.innerHTML).toContain("Hello Christy: Hi")
   })
 })

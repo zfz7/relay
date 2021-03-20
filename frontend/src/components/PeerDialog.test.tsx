@@ -13,12 +13,12 @@ const createPeerMock = createPeer as jest.MockedFunction<typeof createPeer>
 
 describe('PeerCreation', () => {
   const peer = {id: '072597dc-65c9-4a27-857f-60d2b70442de',
-    expiration: new Date("2021-04-19T01:28:12.687689Z")}
+    expiration: new Date("2021-04-19T01:28:12.687689")}
   it('it renders ', async () => {
     render(<PeerDialog peer={peer} open={true} onClose={jest.fn()} onConfirm={jest.fn()}/>);
     const title = screen.getByText(/secure connection/);
     expect(title).toBeInTheDocument();
-    const expiration = screen.getByText(/Sun Apr 18 2021/);
+    const expiration = screen.getByText(/Sun Apr 10 2021/);
     expect(expiration).toBeInTheDocument();
 
   })
