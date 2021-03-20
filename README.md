@@ -18,16 +18,14 @@ Will run relay.jar on local machine and DB inside docker
    * If on Ubuntu 20 run from project root: `./setupEC2.sh`
 2. Install certs
    * run `certbot certonly --standalone`
-2. Create keystore.p12, 
+3. Create keystore.p12, 
    * run from letscrypt folder: `openssl pkcs12 -export -in fullchain.pem -inkey privkey.pem -out keystore.p12 -name tomcat -CAfile chain.pem -caname root`
    * Use password `relay`
-3. Copy certs home folder 
-   * run from project root:` cp /etc/letsencrypt/live/relay.zfz7.org/keystore.p12 .`
-3. Build Jar
+4. Build Jar
    * run from project root:`./gradlew clean assemble`
-4. Build relay docker image
-   * run from project root: `docker build . -t relay`
 5. Start all containers
    * run from project root: `docker-compose -f docker-compose.prod.yml up -d`
    * database is not exposed to localhost
    * exposes app on port 80 and 443
+6. Start app
+   * run from project root: `java -jar build/libs/relay.jar --spring.profiles.active=cloud`

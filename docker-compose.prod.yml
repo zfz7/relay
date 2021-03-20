@@ -8,11 +8,5 @@ services:
       POSTGRES_DB: relay
     volumes:
       - ./pgdata:/var/lib/postgresql/data
-
-  web:
-    image: relay
-    depends_on:
-      - postgres_db
     ports:
-      - "80:8080"
-      - "443:8443"
+      - 5432:5432
