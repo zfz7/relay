@@ -44,8 +44,8 @@ class RelayService(
     }
     writer.close()
     runBashCommand("sudo cp wg0.conf /etc/wireguard/",false)
-    runBashCommand("systemctl enable wg-quick@wg0",false)
-    runBashCommand("systemctl restart wg-quick@wg0",false)
+    runBashCommand("sudo systemctl enable wg-quick@wg0",false)
+    runBashCommand("sudo systemctl restart wg-quick@wg0",false)
   }
 
   private fun runBashCommand(command: String, check: Boolean = true): String {
