@@ -67,7 +67,6 @@ class PeerControllerTest {
   fun getPeerConfig() {
     var peer = Peer(
       address = "10.8.0.3/24,fd42:42:42::3/64",
-      dns = "10.8.0.1,fd42:42:42::1",
       privateKey = "ABC",
       allowedIps = "0.0.0.0/0,::/0",
       endPoint = "relay.zfz7.org:51820",
@@ -86,7 +85,6 @@ class PeerControllerTest {
     assertThat(fileResponse.getHeaderValue("Content-Disposition").toString()).contains("relay.conf")
     assertThat(fileResponse.contentAsString).contains("[Interface]")
     assertThat(fileResponse.contentAsString).contains("Address = 10.8.0.3/24,fd42:42:42::3/64")
-    assertThat(fileResponse.contentAsString).contains("DNS = 10.8.0.1,fd42:42:42::1")
     assertThat(fileResponse.contentAsString).contains("PrivateKey = ABC")
     assertThat(fileResponse.contentAsString).contains("[Peer]")
     assertThat(fileResponse.contentAsString).contains("AllowedIPs = 0.0.0.0/0,::/0")
