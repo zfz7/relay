@@ -49,7 +49,7 @@ class PeerService(
 
   private fun getNextAddress(): String {
     val peer = peerRepository.findAll().maxByOrNull { it.id!! } ?: return "10.8.0.2/32"//first client
-    val addy = peer.address.subSequence(0, peer.address.length - 2).split('.')[3].toInt() + 1
+    val addy = peer.address.subSequence(0, peer.address.length - 3).split('.')[3].toInt() + 1
     return "10.8.0.$addy/32"
   }
 
