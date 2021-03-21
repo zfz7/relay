@@ -6,16 +6,16 @@ import org.zfz7.domain.Peer
 import org.zfz7.exchange.PeerDTO
 import org.zfz7.exchange.toDto
 import org.zfz7.repository.PeerRepository
+import org.zfz7.repository.RelayRepository
 import java.io.BufferedReader
 import java.io.File
-import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.*
-import java.util.function.Consumer
 
 @Service
 class PeerService(
-  val peerRepository: PeerRepository
+  val peerRepository: PeerRepository,
+  val relayRepository: RelayRepository
 ) {
   fun createNewPeer(): PeerDTO {
     val privatKey = runBashCommand("wg genkey")
@@ -48,13 +48,14 @@ class PeerService(
   }
 
   private fun getNextAddress(): String {
-    val peer = peerRepository.findAll().maxByOrNull { it.id!! }?: return "10.8.0.2/32"//first client
-    val addy = peer.address.subSequence(0,peer.address.length-2).split('.')[3].toInt() +1
+    val peer = peerRepository.findAll().maxByOrNull { it.id!! } ?: return "10.8.0.2/32"//first client
+    val addy = peer.address.subSequence(0, peer.address.length - 2).split('.')[3].toInt() + 1
     return "10.8.0.$addy/32"
   }
 
   fun getPeerConfig(peerId: UUID): File {
     val peer = peerRepository.findByPublicId(peerId) ?: throw NotFoundException("")
+    val relay = relayRepository.findTopBy() ?: throw NotFoundException("")
     val peerConf = File("relay.conf")
     peerConf.writeText(
       "[Interface]\n" +
@@ -64,17 +65,8 @@ class PeerService(
               "AllowedIPs = ${peer.allowedIps}\n" +
               "Endpoint = ${peer.endPoint}\n" +
               "PresharedKey = ${peer.preSharedKey}\n" +
-              "PublicKey = ${peer.publicKey}\n"
+              "PublicKey = ${relay.publicKey}\n"
     )
     return peerConf
-  }
-}
-
-private class TerminalRunner(
-  private val inputStream: InputStream,
-  private val consumer: Consumer<String>) : Runnable {
-  override fun run() {
-    BufferedReader(InputStreamReader(inputStream)).lines()
-      .forEach(consumer)
   }
 }

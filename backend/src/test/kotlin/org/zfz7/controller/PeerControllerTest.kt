@@ -90,6 +90,6 @@ class PeerControllerTest {
     assertThat(fileResponse.contentAsString).contains("AllowedIPs = 0.0.0.0/0,::/0")
     assertThat(fileResponse.contentAsString).contains("Endpoint = relay.zfz7.org:51820")
     assertThat(fileResponse.contentAsString).contains("PresharedKey = DEF")
-    assertThat(fileResponse.contentAsString).contains("PublicKey = GHI")
+    assertThat(fileResponse.contentAsString).contains("PublicKey =")
   }
 }

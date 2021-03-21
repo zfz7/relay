@@ -6,6 +6,8 @@ pgdata/
 !**/src/main/**/build/
 !**/src/test/**/build/
 **/.DS_Store
+backend/wg0.conf
+backend/relay.conf
 
 ### STS ###
 .apt_generated
