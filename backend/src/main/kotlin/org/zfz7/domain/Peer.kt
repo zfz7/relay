@@ -20,7 +20,6 @@ data class Peer(
   val expiration: Instant = Instant.now().plus(30, ChronoUnit.DAYS),
   //[Interface]
   val address: String,
-  val dns: String,
   val privateKey: String,
   //[Peer]
   val allowedIps: String = "0.0.0.0/0,::/0",

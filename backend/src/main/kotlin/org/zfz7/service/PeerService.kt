@@ -16,7 +16,6 @@ class PeerService(
   fun createNewPeer(): PeerDTO {
     val peer = Peer(
       address = "10.8.0.3/24,fd42:42:42::3/64",
-      dns = "10.8.0.1,fd42:42:42::1",
       privateKey = "ABC",
       preSharedKey = "DEF",
       publicKey = "GHI"
@@ -30,7 +29,6 @@ class PeerService(
     peerConf.writeText(
       "[Interface]\n"+
             "Address = ${peer.address}\n"+
-            "DNS = ${peer.dns}\n"+
             "PrivateKey = ${peer.privateKey}\n"+
             "[Peer]\n"+
             "AllowedIPs = ${peer.allowedIps}\n"+
