@@ -22,7 +22,7 @@ class RelayService(
     val privatKey = runBashCommand("wg genkey")
     val relay = Relay(
       privateKey = privatKey,
-      publicKey = runBashCommand("echo $privatKey | wg genpsk")
+      publicKey = runBashCommand("echo $privatKey | wg pubkey")
     )
     relayRepository.save(relay)
   }

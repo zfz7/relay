@@ -23,7 +23,7 @@ class PeerService(
       address = getNextAddress(),
       privateKey = privatKey,
       preSharedKey = runBashCommand("wg genpsk"),
-      publicKey = runBashCommand("echo $privatKey | wg genpsk")
+      publicKey = runBashCommand("echo $privatKey | wg pubkey")
     )
     return peerRepository.save(peer).toDto()
   }
