@@ -1,4 +1,5 @@
 package org.zfz7.service
+import org.slf4j.LoggerFactory
 import javax.annotation.PostConstruct
 
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,11 +13,13 @@ class StartUp {
   private lateinit var relayRepository: RelayRepository
   @Autowired
   private lateinit var relayService: RelayService
+
+  private val logger = LoggerFactory.getLogger(StartUp::class.java)
   @PostConstruct
   fun init() {
     if(relayRepository.count() == 0L){
       relayService.createRelay()
+      logger.info("New relay created")
     }
-    relayService.writeWg0File()
   }
 }

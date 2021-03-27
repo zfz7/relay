@@ -7,44 +7,25 @@ import org.zfz7.exchange.PeerDTO
 import org.zfz7.exchange.toDto
 import org.zfz7.repository.PeerRepository
 import org.zfz7.repository.RelayRepository
-import java.io.BufferedReader
 import java.io.File
-import java.io.InputStreamReader
 import java.util.*
 
 @Service
 class PeerService(
   val peerRepository: PeerRepository,
-  val relayRepository: RelayRepository
+  val relayRepository: RelayRepository,
+  val wgService: WgService
 ) {
   fun createNewPeer(): PeerDTO {
-    val privatKey = runBashCommand("wg genkey")
-    val peer = Peer(
+    val privateKey = wgService.getPrivateKey()
+    val peer =  peerRepository.save(Peer(
       address = getNextAddress(),
-      privateKey = privatKey,
-      preSharedKey = runBashCommand("wg genpsk"),
-      publicKey = runBashCommand("echo $privatKey | wg pubkey")
-    )
-    return peerRepository.save(peer).toDto()
-  }
-
-
-  private fun runBashCommand(command: String): String {
-    val isWindows = System.getProperty("os.name")
-      .toLowerCase().startsWith("windows")
-    val builder = ProcessBuilder()
-    if (isWindows) {
-      throw Exception("Windows not supported")
-    } else {
-      builder.command("sh", "-c", command)
-    }
-    builder.directory(File(System.getProperty("user.home")))
-    val process = builder.start()
-    val reader = BufferedReader(InputStreamReader(process.inputStream))
-    val line1 = reader.readLine()
-    val exitCode = process.waitFor()
-    assert(exitCode == 0)
-    return line1
+      privateKey = privateKey,
+      preSharedKey = wgService.getPreSharedKey(),
+      publicKey = wgService.getPublicKey(privateKey)
+    ))
+    wgService.writeRelayConfigFile()
+    return peer.toDto()
   }
 
   private fun getNextAddress(): String {
