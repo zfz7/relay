@@ -41,3 +41,6 @@ apt install yarn -y
 snap install core
 snap refresh core
 snap install --classic certbot
+
+#Install wireguard tools
+apt install wireguard-tools
