@@ -15,7 +15,7 @@ data class Relay(
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   val id: Long? = null,
 
-  val address: String = "10.8.0.1/32",
+  val address: String = "10.0.0.1/32",
   val listenPort: String = "51820",
   val privateKey: String,
   val publicKey: String,

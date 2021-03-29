@@ -14,10 +14,10 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Asia/Hong_Kong
+      - TZ=America/Los_Angeles
       - SERVERURL=relay.zfz7.org
       - SERVERPORT=51820
-      - PEERS=1
+      - PEERS=detele-me
       - PEERDNS=auto
       - INTERNAL_SUBNET=10.0.0.0
     ports:

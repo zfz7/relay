@@ -1,6 +1,7 @@
 backend/HELP.md
 .gradle
 build/
+config/
 pgdata/
 !../gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/

@@ -44,7 +44,12 @@ class WgServiceProd (
   override fun writeRelayConfigFile() {
     val relay = relayRepository.findTopBy() ?: throw NotFoundException("")
     val peers = peerRepository.findAll()
-    val writer = FileWriter("wg0.conf")
+
+    val writer: FileWriter = try{
+      FileWriter(File("./config","wg0.conf"))
+    } catch(e: Exception){
+      FileWriter("wg0.conf")
+    }
 
     writer.write("[Interface]\n")
     writer.write("Address = ${relay.address}\n")
