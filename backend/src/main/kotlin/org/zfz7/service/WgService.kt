@@ -65,7 +65,7 @@ class WgServiceProd (
     }
     writer.close()
     println(runBashCommand("""echo ${'$'}{USER}"""))
-    println(runBashCommand("sudo docker-compose -f ~/relay/docker-compose.prod.yml restart wireguard"))
+    println(runBashCommand("docker-compose -f /home/ubuntu/relay/docker-compose.prod.yml restart wireguard"))
   }
 
   private fun runBashCommand(command: String): String {
