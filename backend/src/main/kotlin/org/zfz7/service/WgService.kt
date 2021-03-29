@@ -55,7 +55,9 @@ class WgServiceProd (
     writer.write("Address = ${relay.address}\n")
     writer.write("ListenPort = ${relay.listenPort}\n")
     writer.write("PrivateKey = ${relay.privateKey}\n")
-    for (peer in peers) {
+    writer.write(("PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE\n"))
+    writer.write(("PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE\n"))
+      for (peer in peers) {
       writer.write("[Peer]\n")
       writer.write("PublicKey = ${peer.publicKey}\n")
       writer.write("PresharedKey = ${peer.preSharedKey}\n")
