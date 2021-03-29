@@ -64,7 +64,8 @@ class WgServiceProd (
       writer.write("AllowedIPs = ${peer.address}\n")
     }
     writer.close()
-    runBashCommand("sudo docker-compose -f ~/relay/docker-compose.prod.yml restart wireguard")
+    println(runBashCommand("""echo ${'$'}{USER}"""))
+    println(runBashCommand("sudo docker-compose -f ~/relay/docker-compose.prod.yml restart wireguard"))
   }
 
   private fun runBashCommand(command: String): String {
