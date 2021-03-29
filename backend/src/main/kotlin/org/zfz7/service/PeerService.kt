@@ -42,6 +42,7 @@ class PeerService(
       "[Interface]\n" +
               "Address = ${peer.address}\n" +
               "PrivateKey = ${peer.privateKey}\n" +
+              "DNS = 10.0.0.1\n"+
               "[Peer]\n" +
               "AllowedIPs = ${peer.allowedIps}\n" +
               "Endpoint = ${peer.endPoint}\n" +
