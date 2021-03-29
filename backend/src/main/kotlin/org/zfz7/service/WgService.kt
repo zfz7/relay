@@ -64,9 +64,7 @@ class WgServiceProd (
       writer.write("AllowedIPs = ${peer.address}\n")
     }
     writer.close()
-//    runBashCommand("sudo cp wg0.conf /etc/wireguard/")
-//    runBashCommand("sudo systemctl enable wg-quick@wg0")
-//    runBashCommand("sudo systemctl restart wg-quick@wg0")
+    runBashCommand("docker-compose -f docker-compose.prod.yml restart wireguard")
   }
 
   private fun runBashCommand(command: String): String {
