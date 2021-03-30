@@ -6,7 +6,6 @@ import {act} from "react-dom/test-utils";
 import userEvent from "@testing-library/user-event";
 import {downloadPeer} from "../exchange/DownloadPeer";
 
-
 jest.mock('../exchange/CreatePeer')
 const createPeerMock = createPeer as jest.MockedFunction<typeof createPeer>
 
@@ -29,17 +28,30 @@ describe('PeerCreation', () => {
   })
 
   it('creates new peer once user clicks connect button', async () => {
-    const {container} = render(<HomePage/>)
-    userEvent.click(screen.getByText("let's get started"))
+    const {getByPlaceholderText}=render(<HomePage/>)
+    userEvent.type(getByPlaceholderText('code'), 'code')
+    userEvent.click(screen.getByText("create"))
     await act(async () => {
       await createPeerMock
     })
-    expect(createPeerMock).toHaveBeenCalledTimes(1)
+    expect(createPeerMock).toHaveBeenCalledWith({code:"code"})
 
     userEvent.click(screen.getByText("download"))
     await act(async () => {
       await downloadPeerMock
     })
     expect(downloadPeerMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('shows error when code is bad', async () => {
+    createPeerMock.mockRejectedValue("")
+    const {getByPlaceholderText}=render(<HomePage/>)
+    userEvent.type(getByPlaceholderText('code'), 'bad code')
+    userEvent.click(screen.getByText("create"))
+    await act(async () => {
+      await createPeerMock
+    })
+    expect(createPeerMock).toHaveBeenCalledWith({code:"bad code"})
+    expect(screen.getByText('Incorrect Code'))
   })
 })

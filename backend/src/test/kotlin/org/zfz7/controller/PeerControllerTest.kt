@@ -17,7 +17,9 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.zfz7.domain.Peer
+import org.zfz7.exchange.PeerConfigRequest
 import org.zfz7.exchange.PeerDTO
+import org.zfz7.exchange.PeerRequest
 import org.zfz7.repository.PeerRepository
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -51,8 +53,15 @@ class PeerControllerTest {
     val result = mockMvc.perform(
       MockMvcRequestBuilders.post("/api/peer")
         .contentType(MediaType.APPLICATION_JSON)
+        .content(
+          objectMapper.writeValueAsBytes(
+            PeerRequest(
+              code = "test-code"
+            )
+          )
+        )
     )
-      .andExpect(status().isCreated)
+      .andExpect(status().isAccepted)
       .andReturn()
 
     val response = objectMapper.readValue(result.response.contentAsByteArray, PeerDTO::class.java)
@@ -60,6 +69,25 @@ class PeerControllerTest {
     assertThat(response.expiration).isEqualTo(now.plus(30, ChronoUnit.DAYS))
 
     assertThat(peerRepository.findAll().size).isEqualTo(1)
+  }
+
+  @Test
+  @DisplayName("Create new peer")
+  fun `Should not create a new peer when code is bad`() {
+    mockMvc.perform(
+      MockMvcRequestBuilders.post("/api/peer")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(
+          objectMapper.writeValueAsBytes(
+            PeerRequest(
+              code = "wrong code"
+            )
+          )
+        )
+    )
+      .andExpect(status().isBadRequest)
+      .andReturn()
+    assertThat(peerRepository.findAll().size).isEqualTo(0)
   }
 
   @Test
@@ -75,8 +103,15 @@ class PeerControllerTest {
     )
     peer = peerRepository.save(peer)
     val fileResponse = mockMvc.perform(
-      MockMvcRequestBuilders.get("/api/peer/${peer.publicId}")
-        .contentType(MediaType.TEXT_PLAIN)
+      MockMvcRequestBuilders.post("/api/peer/config")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(
+          objectMapper.writeValueAsBytes(
+            PeerConfigRequest(
+              id = peer.publicId
+            )
+          )
+        )
     )
       .andExpect(status().isOk)
       .andReturn().response
@@ -86,6 +121,7 @@ class PeerControllerTest {
     assertThat(fileResponse.contentAsString).contains("[Interface]")
     assertThat(fileResponse.contentAsString).contains("Address = 10.8.0.3/24,fd42:42:42::3/64")
     assertThat(fileResponse.contentAsString).contains("PrivateKey = ABC")
+    assertThat(fileResponse.contentAsString).contains("DNS = 10.0.0.1")
     assertThat(fileResponse.contentAsString).contains("[Peer]")
     assertThat(fileResponse.contentAsString).contains("AllowedIPs = 0.0.0.0/0,::/0")
     assertThat(fileResponse.contentAsString).contains("Endpoint = relay.zfz7.org:51820")

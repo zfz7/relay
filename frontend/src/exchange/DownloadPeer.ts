@@ -1,13 +1,14 @@
 import {saveAs} from "file-saver"
-import {Peer} from "./types"
+import {PeerConfigRequest} from "./types"
 
-export const downloadPeer = async (peer: Peer) => {
-  const promise = await fetch(`/api/peer/${peer.id}`,
+export const downloadPeer = async (peer: PeerConfigRequest) => {
+  const promise = await fetch(`/api/peer/config`,
     {
-      method: 'GET',
+      method: 'POST',
       headers: {
-        "Accept": "application/text/plain",
-      }
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(peer)
     }
   )
 

@@ -9,3 +9,5 @@ spring:
 logging:
   level:
     root: OFF
+codeService:
+  code: ${CODE:journey-code}
