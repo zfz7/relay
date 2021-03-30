@@ -30,7 +30,7 @@ describe('PeerCreation', () => {
 
   it('creates new peer once user clicks connect button', async () => {
     const {container} = render(<HomePage/>)
-    userEvent.click(screen.getByText("Connect"))
+    userEvent.click(screen.getByText("let's get started"))
     await act(async () => {
       await createPeerMock
     })

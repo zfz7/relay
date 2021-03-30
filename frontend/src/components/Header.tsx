@@ -21,7 +21,7 @@ export const Header: React.FC = () => {
         </Grid>
         <Grid item>
           <Typography variant="h4" display="inline">Relay</Typography>
-          <Typography variant="subtitle1" display="inline">A secure connection</Typography>
+          <Typography variant="subtitle1" display="inline">a secure connection</Typography>
         </Grid>
       </Grid>
     </AppBar>
