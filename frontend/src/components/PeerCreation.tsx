@@ -47,6 +47,7 @@ export const PeerCreation: React.FC = () => {
             placeholder="code"
             id="standard-basic"
             label="code"
+            type="password"
             value={code}
             onChange={(event) => setCode(event.target.value)}
           />
