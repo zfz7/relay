@@ -30,14 +30,14 @@ class PeerController(
   @PostMapping("/config")
   @ResponseStatus(code = HttpStatus.OK)
   fun getPeerConfig(@RequestBody body: PeerConfigRequest): ResponseEntity<InputStreamResource> {
-    val fileName = "relay.conf"
     val headers = HttpHeaders()
+    val peerConfig = peerService.getPeerConfig(body.id)
     headers.contentType = MediaType.APPLICATION_OCTET_STREAM
     headers.contentDisposition =
       ContentDisposition.builder("attachment")
-        .filename(fileName)
+        .filename("relay.conf")
         .build()
-    val peerConfig = peerService.getPeerConfig(body.id)
+    headers.contentLength = peerConfig.length()
     return ResponseEntity(InputStreamResource(peerConfig.inputStream()), headers, HttpStatus.OK)
   }
 }
