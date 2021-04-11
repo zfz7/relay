@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*
 import org.zfz7.exchange.PeerConfigRequest
 import org.zfz7.exchange.PeerDTO
 import org.zfz7.exchange.PeerRequest
+import org.zfz7.exchange.toDto
 import org.zfz7.service.CodeService
 import org.zfz7.service.PeerService
 
@@ -21,7 +22,7 @@ class PeerController(
   fun createPeer(@RequestBody body: PeerRequest): ResponseEntity<PeerDTO> {
     return try {
       codeService.checkCode(body.code)
-      return ResponseEntity.accepted().body(peerService.createNewPeer())
+      return ResponseEntity.accepted().body(peerService.createNewPeer().toDto())
     } catch (e: Exception) {
       ResponseEntity(HttpStatus.BAD_REQUEST)
     }

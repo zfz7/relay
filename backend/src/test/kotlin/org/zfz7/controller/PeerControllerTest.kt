@@ -7,6 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -21,6 +22,7 @@ import org.zfz7.exchange.PeerConfigRequest
 import org.zfz7.exchange.PeerDTO
 import org.zfz7.exchange.PeerRequest
 import org.zfz7.repository.PeerRepository
+import org.zfz7.service.PeerService
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
@@ -30,6 +32,9 @@ import java.time.temporal.ChronoUnit
 class PeerControllerTest {
   @Autowired
   private lateinit var peerRepository: PeerRepository
+
+  @Autowired
+  private lateinit var peerService: PeerService
 
   @Autowired
   private lateinit var mockMvc: MockMvc
@@ -129,5 +134,40 @@ class PeerControllerTest {
     assertThat(fileResponse.contentAsString).contains("Endpoint = relay.zfz7.org:51820")
     assertThat(fileResponse.contentAsString).contains("PresharedKey = DEF")
     assertThat(fileResponse.contentAsString).contains("PublicKey =")
+  }
+
+  @Test
+  @DisplayName("support up to 256^2 peers")
+  fun supportManyPeers() {
+    var peer =  peerService.createNewPeer()
+    assertThat(peer.address).isEqualTo("10.0.0.2/32")
+    peer =  peerService.createNewPeer()
+    assertThat(peer.address).isEqualTo("10.0.0.3/32")
+    peerRepository.save(Peer(
+      address = "10.0.0.255/32",
+      privateKey = "ABC",
+      allowedIps = "0.0.0.0/0,::/0",
+      endPoint = "relay.zfz7.org:51820",
+      preSharedKey = "DEF",
+      publicKey = "GHI",
+    ))
+    peer =  peerService.createNewPeer()
+    assertThat(peer.address).isEqualTo("10.0.1.0/32")
+    peer =  peerService.createNewPeer()
+    assertThat(peer.address).isEqualTo("10.0.1.1/32")
+
+    peerRepository.save(Peer(
+      address = "10.0.255.254/32",
+      privateKey = "ABC",
+      allowedIps = "0.0.0.0/0,::/0",
+      endPoint = "relay.zfz7.org:51820",
+      preSharedKey = "DEF",
+      publicKey = "GHI",
+    ))
+    peer =  peerService.createNewPeer()
+    assertThat(peer.address).isEqualTo("10.0.255.255/32")
+    assertThrows<Exception> {
+      peer =  peerService.createNewPeer()
+    }
   }
 }

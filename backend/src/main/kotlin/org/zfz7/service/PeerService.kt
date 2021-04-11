@@ -4,8 +4,6 @@ import javassist.NotFoundException
 import org.springframework.stereotype.Service
 import org.zfz7.domain.Peer
 import org.zfz7.exchange.ConfFile
-import org.zfz7.exchange.PeerDTO
-import org.zfz7.exchange.toDto
 import org.zfz7.repository.PeerRepository
 import org.zfz7.repository.RelayRepository
 import java.io.ByteArrayInputStream
@@ -24,7 +22,7 @@ class PeerService(
     .withLocale(Locale.US)
     .withZone(ZoneOffset.UTC)
 
-  fun createNewPeer(): PeerDTO {
+  fun createNewPeer(): Peer {
     val privateKey = wgService.getPrivateKey()
     val peer =  peerRepository.save(Peer(
       address = getNextAddress(),
@@ -33,13 +31,23 @@ class PeerService(
       publicKey = wgService.getPublicKey(privateKey)
     ))
     wgService.writeRelayConfigFile()
-    return peer.toDto()
+    return peer
   }
 
   private fun getNextAddress(): String {
     val peer = peerRepository.findAll().maxByOrNull { it.id!! } ?: return "10.0.0.2/32"//first client
-    val addy = peer.address.subSequence(0, peer.address.length - 3).split('.')[3].toInt() + 1
-    return "10.0.0.$addy/32"
+    val parts: List<String> = peer.address.split(".","/")
+    require(parts.size == 5)
+    var value: Int = parts[2].toInt(10) shl 8 * 1 and 0x0000FF00 or (
+            parts[3].toInt(10) shl 8 * 0 and 0x000000FF)
+    if(value++ >= 65535)
+      throw Exception("Too many clients")
+    var nextIp = "10.0"
+    for (i in 1 downTo 0) {
+      nextIp += "."
+      nextIp += value shr i * 8 and 0x000000FF
+    }
+    return "$nextIp/32"
   }
 
   fun getPeerConfig(peerId: UUID): ConfFile {
