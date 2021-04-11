@@ -1,6 +1,8 @@
 package org.zfz7.service
 
 import javassist.NotFoundException
+import org.slf4j.LoggerFactory
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.zfz7.domain.Peer
 import org.zfz7.exchange.ConfFile
@@ -8,6 +10,7 @@ import org.zfz7.repository.PeerRepository
 import org.zfz7.repository.RelayRepository
 import java.io.ByteArrayInputStream
 import java.io.InputStream
+import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -21,6 +24,7 @@ class PeerService(
   var formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd-MMM-YYYY")
     .withLocale(Locale.US)
     .withZone(ZoneOffset.UTC)
+  private val logger = LoggerFactory.getLogger(StartUp::class.java)
 
   fun createNewPeer(): Peer {
     val privateKey = wgService.getPrivateKey()
@@ -69,5 +73,16 @@ class PeerService(
       file = targetStream,
       length = confByteArray.size.toLong()
     )
+  }
+
+  @Scheduled(cron = "0 0 12 * * ?")//Every day at 12
+  fun removeExpiredPeers() {
+    val now = Instant.now()
+    val peersToRemove = peerRepository.findAll().filter { it.expiration.isBefore(now) }
+    if(peersToRemove.isNotEmpty()){
+      peerRepository.deleteAll(peersToRemove)
+      wgService.writeRelayConfigFile()
+    }
+    logger.info("${peersToRemove.size} peers removed")
   }
 }

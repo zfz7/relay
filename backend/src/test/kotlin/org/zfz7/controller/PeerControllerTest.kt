@@ -23,6 +23,7 @@ import org.zfz7.exchange.PeerDTO
 import org.zfz7.exchange.PeerRequest
 import org.zfz7.repository.PeerRepository
 import org.zfz7.service.PeerService
+import org.zfz7.service.WgService
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
@@ -35,6 +36,9 @@ class PeerControllerTest {
 
   @Autowired
   private lateinit var peerService: PeerService
+
+  @Autowired
+  private lateinit var wgService: WgService
 
   @Autowired
   private lateinit var mockMvc: MockMvc
@@ -169,5 +173,33 @@ class PeerControllerTest {
     assertThrows<Exception> {
       peer =  peerService.createNewPeer()
     }
+  }
+
+  @Test
+  fun removePeersAfterExpiration() {
+    peerRepository.save(Peer(
+      address = "10.0.0.1/32",
+      privateKey = "ABC",
+      allowedIps = "0.0.0.0/0,::/0",
+      endPoint = "relay.zfz7.org:51820",
+      preSharedKey = "DEF",
+      publicKey = "GHI",
+      expiration = Instant.now().minus(15, ChronoUnit.DAYS)
+    ))
+
+    peerRepository.save(Peer(
+      address = "10.0.0.2/32",
+      privateKey = "ABC",
+      allowedIps = "0.0.0.0/0,::/0",
+      endPoint = "relay.zfz7.org:51820",
+      preSharedKey = "DEF",
+      publicKey = "GHI",
+      expiration = Instant.now().plus(15, ChronoUnit.DAYS)
+    ))
+    peerService.removeExpiredPeers()
+
+    val peers = peerRepository.findAll()
+    assertThat(peers.size).isEqualTo(1)
+    assertThat(peers[0].address).isEqualTo("10.0.0.2/32")
   }
 }
