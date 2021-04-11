@@ -99,7 +99,8 @@ class PeerControllerTest {
       allowedIps = "0.0.0.0/0,::/0",
       endPoint = "relay.zfz7.org:51820",
       preSharedKey = "DEF",
-      publicKey = "GHI"
+      publicKey = "GHI",
+      expiration = Instant.parse("2018-11-30T18:35:24.00Z")
     )
     peer = peerRepository.save(peer)
     val fileResponse = mockMvc.perform(
@@ -117,7 +118,8 @@ class PeerControllerTest {
       .andReturn().response
 
     assertThat(fileResponse.headerNames).contains("Content-Disposition")
-    assertThat(fileResponse.getHeaderValue("Content-Disposition").toString()).contains("relay.conf")
+    assertThat(fileResponse.contentLength).isEqualTo(226)
+    assertThat(fileResponse.getHeaderValue("Content-Disposition").toString()).contains("relay-expires-30-Nov-2018.conf")
     assertThat(fileResponse.contentAsString).contains("[Interface]")
     assertThat(fileResponse.contentAsString).contains("Address = 10.8.0.3/24,fd42:42:42::3/64")
     assertThat(fileResponse.contentAsString).contains("PrivateKey = ABC")

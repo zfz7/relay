@@ -31,13 +31,13 @@ class PeerController(
   @ResponseStatus(code = HttpStatus.OK)
   fun getPeerConfig(@RequestBody body: PeerConfigRequest): ResponseEntity<InputStreamResource> {
     val headers = HttpHeaders()
-    val peerConfig = peerService.getPeerConfig(body.id)
+    val conf = peerService.getPeerConfig(body.id)
     headers.contentType = MediaType.APPLICATION_OCTET_STREAM
     headers.contentDisposition =
       ContentDisposition.builder("attachment")
-        .filename("relay.conf")
+        .filename(conf.filename)
         .build()
-    headers.contentLength = peerConfig.length()
-    return ResponseEntity(InputStreamResource(peerConfig.inputStream()), headers, HttpStatus.OK)
+    headers.contentLength = conf.length
+    return ResponseEntity(InputStreamResource(conf.file), headers, HttpStatus.OK)
   }
 }
