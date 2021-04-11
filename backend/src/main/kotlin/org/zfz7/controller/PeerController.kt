@@ -38,7 +38,6 @@ class PeerController(
       ContentDisposition.builder("attachment")
         .filename(conf.filename)
         .build()
-    headers.contentLength = conf.length
     return ResponseEntity(InputStreamResource(conf.file), headers, HttpStatus.OK)
   }
 }

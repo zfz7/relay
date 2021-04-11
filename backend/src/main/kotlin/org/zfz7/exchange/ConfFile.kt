@@ -5,5 +5,4 @@ import java.io.InputStream
 data class ConfFile(
   val filename: String,
   val file: InputStream,
-  val length: Long
 )

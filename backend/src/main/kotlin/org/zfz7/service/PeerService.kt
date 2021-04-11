@@ -70,8 +70,7 @@ class PeerService(
     val targetStream: InputStream = ByteArrayInputStream(confByteArray)
     return ConfFile(
       filename = "relay-expires-${formatter.format(peer.expiration)}.conf",
-      file = targetStream,
-      length = confByteArray.size.toLong()
+      file = targetStream
     )
   }
 
