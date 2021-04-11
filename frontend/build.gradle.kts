@@ -6,7 +6,7 @@ plugins {
 }
 
 configure<NodeExtension> {
-  version.set("14.16.0")
+  version.set("14.16.1")
   yarnVersion.set("1.22.5")
   download.set(true)
 }
