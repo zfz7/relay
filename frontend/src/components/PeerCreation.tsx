@@ -3,7 +3,6 @@ import {createPeer} from "../exchange/CreatePeer";
 import {Peer} from "../exchange/types";
 import {Button, Grid, LinearProgress, TextField, Typography} from "@material-ui/core";
 import {PeerDialog} from "./PeerDialog";
-import {downloadPeer} from "../exchange/DownloadPeer";
 
 export const PeerCreation: React.FC = () => {
   const [peer, setPeer] = useState<Peer>({id: "", expiration: new Date()})
@@ -28,12 +27,7 @@ export const PeerCreation: React.FC = () => {
         })
   }
 
-  const download = () => {
-    downloadPeer({id: peer.id})
-      .then(() => {
-        setOpen(false)
-      })
-  }
+
   return (<>
       <Grid container spacing={2} direction="column" alignItems="center" justify="center" style={{margin: "1rem"}}>
         <Grid item>
@@ -62,7 +56,6 @@ export const PeerCreation: React.FC = () => {
         open={open}
         peer={peer}
         onClose={() => setOpen(false)}
-        onConfirm={download}
       />
     </>
   )

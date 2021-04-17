@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {
   Button,
   Dialog,
@@ -9,26 +9,40 @@ import {
   Typography,
 } from '@material-ui/core'
 import {Peer} from "../exchange/types";
+import {GenerateQRCode} from "./GenerateQRCode";
+import {downloadPeer} from "../exchange/DownloadPeer";
 
 type PeerDialogProps = {
   open: boolean
   peer: Peer
-  onConfirm: () => void
   onClose: () => void
 }
 
-export const PeerDialog = ({peer, open, onConfirm, onClose}: PeerDialogProps) => {
+export const PeerDialog = ({peer, open, onClose}: PeerDialogProps) => {
+  const [conf, setConf] = useState<string>("")
+  const download = () => {
+    downloadPeer({id: peer.id})
+      .then((conf) => {
+        setConf(conf)
+      })
+  }
+  useEffect(()=>{
+    if(open!){
+      setConf("")
+    }
+  },[open])
   return (
     <Dialog
       data-testid="confirmDialog"
       open={open}
     >
       <DialogTitle disableTypography>
-        <Typography variant="h5">here is secure connection</Typography>
+        <Typography variant="h5">here is your secure connection</Typography>
       </DialogTitle>
       <DialogContent>
-        <DialogContentText>{`Your connection will expire ${peer.expiration.toDateString()}`}
+        <DialogContentText>{`Your connection will expire on ${peer.expiration.toDateString()}`}
         </DialogContentText>
+        {!!conf && <GenerateQRCode text={conf}/>}
       </DialogContent>
       <DialogActions>
         <Button
@@ -39,10 +53,8 @@ export const PeerDialog = ({peer, open, onConfirm, onClose}: PeerDialogProps) =>
         <Button data-testid="confirmButton"
                 variant="contained"
                 color="secondary"
-                onClick={() => {
-                  onConfirm()
-                }}>
-          download
+                onClick={download}>
+          {!!conf? "download again" : "download"}
         </Button>
       </DialogActions>
     </Dialog>
