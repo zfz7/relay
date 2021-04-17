@@ -21,7 +21,7 @@ class PeerService(
   val relayRepository: RelayRepository,
   val wgService: WgService
 ) {
-  var formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd-MMM-YYYY")
+  var formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("ddMMM")
     .withLocale(Locale.US)
     .withZone(ZoneOffset.UTC)
   private val logger = LoggerFactory.getLogger(StartUp::class.java)
@@ -69,7 +69,7 @@ class PeerService(
               "PublicKey = ${relay.publicKey}\n").toByteArray()
     val targetStream: InputStream = ByteArrayInputStream(confByteArray)
     return ConfFile(
-      filename = "relay-expires-${formatter.format(peer.expiration)}.conf",
+      filename = "relayExp${formatter.format(peer.expiration)}.conf",
       file = targetStream
     )
   }

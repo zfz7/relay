@@ -127,7 +127,7 @@ class PeerControllerTest {
       .andReturn().response
 
     assertThat(fileResponse.headerNames).contains("Content-Disposition")
-    assertThat(fileResponse.getHeaderValue("Content-Disposition").toString()).contains("relay-expires-30-Nov-2018.conf")
+    assertThat(fileResponse.getHeaderValue("Content-Disposition").toString()).contains("relayExp30Nov.conf")
     assertThat(fileResponse.contentAsString).contains("[Interface]")
     assertThat(fileResponse.contentAsString).contains("Address = 10.8.0.3/24,fd42:42:42::3/64")
     assertThat(fileResponse.contentAsString).contains("PrivateKey = ABC")
