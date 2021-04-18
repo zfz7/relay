@@ -10,7 +10,9 @@ export const GenerateQRCode = ({text}: QRCodeProps) => {
   useEffect(() => {
     if (canvas != null && canvas.current != null) {
       QRCode.toCanvas(document.getElementById('canvas'),
-        text, { toSJISFunc: QRCode.toSJIS }, (error: Error) => {if(error) console.error(error)})
+        text,
+        { toSJISFunc: QRCode.toSJIS, scale: window.screen.width > 800?4:2},
+        (error: Error) => {if(error) console.error(error)})
     }
   });
   return(<canvas id="canvas" ref={canvas}/>);
