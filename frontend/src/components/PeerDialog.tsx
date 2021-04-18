@@ -36,8 +36,8 @@ export const PeerDialog = ({peer, open, onClose}: PeerDialogProps) => {
       data-testid="confirmDialog"
       open={open}
     >
-      <DialogTitle>
-        <Typography variant="h6">connection</Typography>
+      <DialogTitle disableTypography>
+        <Typography variant="h6">relay</Typography>
       </DialogTitle>
       <DialogContent>
         <DialogContentText>{`Your connection will expire on ${peer.expiration.toDateString()}`}
