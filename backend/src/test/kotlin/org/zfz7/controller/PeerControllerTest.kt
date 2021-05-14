@@ -75,7 +75,7 @@ class PeerControllerTest {
 
     val response = objectMapper.readValue(result.response.contentAsByteArray, PeerDTO::class.java)
     assertThat(response.id).isNotNull
-    assertThat(response.expiration).isEqualTo(now.plus(30, ChronoUnit.DAYS))
+    assertThat(response.expiration).isEqualTo(now.plus(180, ChronoUnit.DAYS))
 
     assertThat(peerRepository.findAll().size).isEqualTo(1)
   }

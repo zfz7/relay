@@ -1,8 +1,6 @@
 package org.zfz7.domain
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import org.zfz7.exchange.PeerDTO
-import java.security.PrivateKey
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*
@@ -17,7 +15,7 @@ data class Peer(
 
   val publicId: UUID = UUID.randomUUID(),
 
-  val expiration: Instant = Instant.now().plus(30, ChronoUnit.DAYS),
+  val expiration: Instant = Instant.now().plus(180, ChronoUnit.DAYS),
   //[Interface]
   val address: String,
   val privateKey: String,
