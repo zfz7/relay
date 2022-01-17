@@ -1,5 +1,5 @@
 import React from 'react'
-import {BrowserRouter as Router, Redirect, Route, Switch} from "react-router-dom"
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom"
 import {HomePage} from "./components/HomePage"
 import {ThemeProvider} from '@material-ui/styles'
 import {theme} from "./styles/theme";
@@ -15,10 +15,9 @@ export const App: React.FC = () => <ThemeProvider theme={theme}>
       flexDirection: "column",
       backgroundColor: theme.palette.background.default
     }}>
-      <Switch>
-        <Route exact path="/" component={HomePage}/>
-        <Redirect to="/"/>
-      </Switch>
+      <Routes>
+        <Route path="/" element={<HomePage/>}/>
+      </Routes>
     </Container>
   </Router>
 </ThemeProvider>

@@ -18,7 +18,7 @@ describe('PeerCreation', () => {
       createPeerMock.mockResolvedValue(
         {id: '072597dc-65c9-4a27-857f-60d2b70442de',
                 expiration: new Date("2021-04-19T01:28:12.687689Z")})
-    downloadPeerMock.mockResolvedValue()
+    downloadPeerMock.mockResolvedValue("")
   })
 
   afterEach(() => {
@@ -28,8 +28,8 @@ describe('PeerCreation', () => {
   })
 
   it('creates new peer once user clicks connect button', async () => {
-    const {getByPlaceholderText}=render(<HomePage/>)
-    userEvent.type(getByPlaceholderText('code'), 'code')
+    render(<HomePage/>)
+    userEvent.type(screen.getByPlaceholderText('code'), 'code')
     userEvent.click(screen.getByText("create"))
     await act(async () => {
       await createPeerMock
@@ -45,13 +45,13 @@ describe('PeerCreation', () => {
 
   it('shows error when code is bad', async () => {
     createPeerMock.mockRejectedValue("")
-    const {getByPlaceholderText}=render(<HomePage/>)
-    userEvent.type(getByPlaceholderText('code'), 'bad code')
+    render(<HomePage/>)
+    userEvent.type(screen.getByPlaceholderText('code'), 'bad code')
     userEvent.click(screen.getByText("create"))
     await act(async () => {
       await createPeerMock
     })
     expect(createPeerMock).toHaveBeenCalledWith({code:"bad code"})
-    expect(screen.getByText('Incorrect Code'))
+    expect(screen.getByText('Incorrect Code')).toBeInTheDocument()
   })
 })
