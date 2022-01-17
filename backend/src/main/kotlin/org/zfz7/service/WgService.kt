@@ -1,9 +1,9 @@
 package org.zfz7.service
 
-import javassist.NotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Service
+import org.zfz7.exchange.NotFoundException
 import org.zfz7.repository.PeerRepository
 import org.zfz7.repository.RelayRepository
 import java.io.BufferedReader
@@ -42,7 +42,7 @@ class WgServiceProd (
     return runBashCommand("wg genpsk")
   }
   override fun writeRelayConfigFile() {
-    val relay = relayRepository.findTopBy() ?: throw NotFoundException("")
+    val relay = relayRepository.findTopBy() ?: throw NotFoundException("Relay not found")
     val peers = peerRepository.findAll()
 
     val writer: FileWriter = try{
@@ -70,7 +70,7 @@ class WgServiceProd (
 
   private fun runBashCommand(command: String): String {
     val isWindows = System.getProperty("os.name")
-      .toLowerCase().startsWith("windows")
+      .lowercase().startsWith("windows")
     val builder = ProcessBuilder()
     if (isWindows) {
       throw Exception("Windows not supported")

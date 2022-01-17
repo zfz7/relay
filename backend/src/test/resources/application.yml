@@ -9,4 +9,4 @@ spring:
     hibernate:
       ddl-auto: validate
 codeService:
-  code: ${CODE:test-code}
+  code: test-code

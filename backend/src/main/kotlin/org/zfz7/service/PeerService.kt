@@ -1,11 +1,11 @@
 package org.zfz7.service
 
-import javassist.NotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.zfz7.domain.Peer
 import org.zfz7.exchange.ConfFile
+import org.zfz7.exchange.NotFoundException
 import org.zfz7.repository.PeerRepository
 import org.zfz7.repository.RelayRepository
 import java.io.ByteArrayInputStream
@@ -55,8 +55,8 @@ class PeerService(
   }
 
   fun getPeerConfig(peerId: UUID): ConfFile {
-    val peer = peerRepository.findByPublicId(peerId) ?: throw NotFoundException("")
-    val relay = relayRepository.findTopBy() ?: throw NotFoundException("")
+    val peer = peerRepository.findByPublicId(peerId) ?: throw NotFoundException("Peer not found")
+    val relay = relayRepository.findTopBy() ?: throw NotFoundException("Relay not found")
     val confByteArray: ByteArray =
       ("[Interface]\n" +
               "Address = ${peer.address}\n" +

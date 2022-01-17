@@ -29,7 +29,7 @@ export const PeerCreation: React.FC = () => {
 
 
   return (<>
-      <Grid container spacing={2} direction="column" alignItems="center" justify="center" style={{margin: "1rem"}}>
+      <Grid container spacing={2} direction="column" alignItems="center" justifyContent="center" style={{margin: "1rem"}}>
         <Grid item>
           <Typography variant={"body2"}>please enter your pre shared code</Typography>
         </Grid>
