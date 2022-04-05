@@ -37,7 +37,7 @@ export const PeerDialog = ({peer, open, onClose}: PeerDialogProps) => {
       open={open}
     >
       <DialogTitle>
-        <Typography variant="h6">relay</Typography>
+        <Typography variant="h6" component="div">relay</Typography>
       </DialogTitle>
       <DialogContent>
         <DialogContentText>{`Your connection will expire on ${peer.expiration.toDateString()}`}
