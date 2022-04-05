@@ -4,6 +4,7 @@ import {HomePage} from "./components/HomePage"
 import { ThemeProvider,  StyledEngineProvider } from '@mui/material';
 import {theme} from "./styles/theme";
 import {Container} from "@mui/material"
+import {AdminPage} from "./components/AdminPage";
 
 
 export const App: React.FC = () => <StyledEngineProvider injectFirst>
@@ -19,6 +20,7 @@ export const App: React.FC = () => <StyledEngineProvider injectFirst>
       }}>
         <Routes>
           <Route path="/" element={<HomePage/>}/>
+          <Route path="/admin" element={<AdminPage/>}/>
         </Routes>
       </Container>
     </Router>

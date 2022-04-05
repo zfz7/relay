@@ -6,5 +6,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: ${GITHUB_DEV_CLIENT_ID}
+            clientSecret: ${GITHUB_DEV_CLIENT_SECRET}
+
 codeService:
   code: ${WG_CODE}

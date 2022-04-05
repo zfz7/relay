@@ -35,4 +35,18 @@ describe('app', () => {
     })
     cy.findByText("Incorrect Code").should("exist")
   })
+
+  it('show correct user count on admin page', () => {
+    cy.visit('/admin')
+    cy.findByText("You have 0 users").should("exist")
+    cy.visit('/')
+    cy.findByText("2) create a client config").click()
+    cy.findByPlaceholderText('code').type('journey-code')
+    cy.findByText("create").click()
+    cy.wait('@createPeer').should((xhr) => {
+      expect(xhr.response!.statusCode).to.eql(202)
+    })
+    cy.visit('/admin')
+    cy.findByText("You have 1 users").should("exist")
+  })
 })

@@ -10,3 +10,7 @@ export interface PeerRequest {
 export interface PeerConfigRequest {
   id: string,
 }
+
+export interface AdminDTO {
+  count: number,
+}

@@ -8,5 +8,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: something
+            clientSecret: something
 codeService:
   code: test-code
