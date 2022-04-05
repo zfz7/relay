@@ -17,9 +17,19 @@ class ControllerErrorHandler {
     error = HttpStatus.NOT_FOUND.reasonPhrase,
     message = ex.localizedMessage,
   )
+
+  @ExceptionHandler(PrincipalForbiddenException::class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  @ResponseBody
+  fun processNotFoundError(ex: PrincipalForbiddenException) = ErrorDTO(
+    status = HttpStatus.FORBIDDEN.value(),
+    error = HttpStatus.FORBIDDEN.reasonPhrase,
+    message = ex.localizedMessage,
+  )
 }
 
 class NotFoundException(message:String): Exception(message)
+class PrincipalForbiddenException(): Exception("This user is forbidden to view this content")
 
 data class ErrorDTO(
   val error: String,
