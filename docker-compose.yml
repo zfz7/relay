@@ -3,10 +3,8 @@ services:
   dev_db:
     container_name: relay_dev_db
     image: postgres
-    volumes:
-      - relay_dev_db:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=relay
+      - POSTGRES_PASSWORD=${POSTGRES_DB_PASSWORD}
       - POSTGRES_USER=relay
       - POSTGRES_DB=relay
     ports:
@@ -14,8 +12,6 @@ services:
   test_db:
     container_name: relay_test_db
     image: postgres
-    volumes:
-      - relay_test_db:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=relay_test
       - POSTGRES_USER=relay_test

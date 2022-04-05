@@ -28,4 +28,4 @@ Will run relay.jar on local machine and DB inside docker
    * database is not exposed to localhost
    * exposes app on port 80 and 443
 6. Start app
-   * run from project root: `java -jar build/libs/relay.jar --spring.profiles.active=cloud --CODE=changme`
+   * run from project root: `java -jar build/libs/relay.jar --spring.profiles.active=cloud --WG_CODE=changme --POSTGRES_DB_PASSWORD=${POSTGRES_DB_PASSWORD}`

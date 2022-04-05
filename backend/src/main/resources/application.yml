@@ -2,9 +2,9 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/relay
     username: relay
-    password: relay
+    password: ${POSTGRES_DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: validate
 codeService:
-  code: ${CODE}
+  code: ${WG_CODE}

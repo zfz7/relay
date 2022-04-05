@@ -1,0 +1,2 @@
+export WG_CODE="test_code"
+export POSTGRES_DB_PASSWORD="password"

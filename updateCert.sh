@@ -8,4 +8,4 @@ ssh relay "sudo openssl pkcs12 -export -in /etc/letsencrypt/live/relay.zfz7.org/
 ssh relay "sudo killall java" || echo "No Java process running"
 ssh relay "docker-compose -f ~/app/docker-compose.prod.yml up -d"
 ssh relay "docker-compose -f ~/app/docker-compose.prod.yml restart wireguard"
-ssh relay "cd ~/app && sudo java -jar ./relay.jar --spring.profiles.active=cloud --CODE=${WG_CODE} &"
+ssh relay "cd ~/app && sudo java -jar ./relay.jar --spring.profiles.active=cloud --WG_CODE=${WG_CODE} --POSTGRES_DB_PASSWORD=${POSTGRES_DB_PASSWORD}&"
