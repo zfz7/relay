@@ -7,7 +7,7 @@ import {
   DialogContentText,
   DialogTitle,
   Typography,
-} from '@material-ui/core'
+} from '@mui/material'
 import {Peer} from "../exchange/types";
 import {GenerateQRCode} from "./GenerateQRCode";
 import {downloadPeer} from "../exchange/DownloadPeer";
@@ -36,7 +36,7 @@ export const PeerDialog = ({peer, open, onClose}: PeerDialogProps) => {
       data-testid="confirmDialog"
       open={open}
     >
-      <DialogTitle disableTypography>
+      <DialogTitle>
         <Typography variant="h6">relay</Typography>
       </DialogTitle>
       <DialogContent>

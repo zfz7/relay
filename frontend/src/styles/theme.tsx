@@ -1,9 +1,9 @@
-import {createTheme} from "@material-ui/core";
+import {createTheme} from "@mui/material";
 
 export const theme = createTheme({
   spacing: 8,
   palette: {
-    type: 'light',
+    mode: 'light',
     primary: {
       main: '#8fa3ad',
       light: '#bfd4df',

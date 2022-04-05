@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {createPeer} from "../exchange/CreatePeer";
 import {Peer} from "../exchange/types";
-import {Button, Grid, LinearProgress, TextField, Typography} from "@material-ui/core";
+import {Button, Grid, LinearProgress, TextField, Typography} from "@mui/material";
 import {PeerDialog} from "./PeerDialog";
 
 export const PeerCreation: React.FC = () => {

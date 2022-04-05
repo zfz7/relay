@@ -1,5 +1,5 @@
 import React from "react"
-import {AppBar, Grid, IconButton, Typography, useTheme} from "@material-ui/core"
+import {AppBar, Grid, IconButton, Typography, useTheme} from "@mui/material"
 import logo from "../styles/images/logo.png"
 
 export const Header: React.FC = () => {

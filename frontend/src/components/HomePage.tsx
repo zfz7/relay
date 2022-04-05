@@ -1,8 +1,8 @@
 import React from 'react'
 import {Header} from "./Header";
 import {PeerCreation} from "./PeerCreation";
-import {Accordion, AccordionDetails, AccordionSummary, Box, Grid, Link, Paper, Typography} from "@material-ui/core";
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {Accordion, AccordionDetails, AccordionSummary, Box, Grid, Link, Paper, Typography} from "@mui/material";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export const HomePage: React.FC = () => {
   return (<>
