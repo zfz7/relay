@@ -11,6 +11,12 @@ export interface PeerConfigRequest {
   id: string,
 }
 
-export interface AdminDTO {
-  count: number,
+export interface Peers {
+  peers: DetailedPeer[],
+}
+
+export interface DetailedPeer {
+  id: string,
+  expiration: Date
+  address: string
 }

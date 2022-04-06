@@ -21,8 +21,10 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.zfz7.domain.Peer
-import org.zfz7.exchange.AdminDTO
+import org.zfz7.exchange.Peers
 import org.zfz7.repository.PeerRepository
+import java.time.Instant
+import java.util.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -53,18 +55,23 @@ class AdminControllerTest {
   @Test
   @DisplayName("Returns Admin DTO")
   fun `Should return the correct Admin DTO`() {
-    peerRepository.save(Peer(address = "", privateKey = "", preSharedKey = "", publicKey = ""))
+    val publicId = UUID.randomUUID()
+    val now = Instant.now()
+    peerRepository.save(Peer(publicId = publicId, expiration =  now, address = "Hello", privateKey = "", preSharedKey = "", publicKey = ""))
 
     val result = mockMvc.perform(
-      MockMvcRequestBuilders.get("/api/admin")
+      MockMvcRequestBuilders.get("/api/admin/peers")
         .contentType(MediaType.APPLICATION_JSON)
         .with(oidcLogin().oidcUser(adminUser))
     )
       .andExpect(status().isOk)
       .andReturn()
 
-    val response = objectMapper.readValue(result.response.contentAsByteArray, AdminDTO::class.java)
-    assertThat(response.count).isEqualTo(1)
+    val response = objectMapper.readValue(result.response.contentAsByteArray, Peers::class.java)
+    assertThat(response.peers).hasSize(1)
+    assertThat(response.peers[0].id).isEqualTo(publicId)
+    assertThat(response.peers[0].expiration).isEqualTo(now)
+    assertThat(response.peers[0].address).isEqualTo("Hello")
 
     assertThat(peerRepository.findAll().size).isEqualTo(1)
   }
@@ -74,7 +81,7 @@ class AdminControllerTest {
   @WithMockUser
   fun `Will error if user does not have correct user attributes`() {
     mockMvc.perform(
-      MockMvcRequestBuilders.get("/api/admin")
+      MockMvcRequestBuilders.get("/api/admin/peers")
         .contentType(MediaType.APPLICATION_JSON)
     )
       .andExpect(status().isForbidden)
@@ -85,7 +92,7 @@ class AdminControllerTest {
   @DisplayName("Will redirect if no user is not logged in")
   fun `Will redirect if no user is not logged in`() {
     mockMvc.perform(
-      MockMvcRequestBuilders.get("/api/admin")
+      MockMvcRequestBuilders.get("/api/admin/peers")
         .contentType(MediaType.APPLICATION_JSON)
     )
       .andExpect(status().isFound)

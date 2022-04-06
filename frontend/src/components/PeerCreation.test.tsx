@@ -51,7 +51,7 @@ describe('PeerCreation', () => {
     await act(async () => {
       await createPeerMock
     })
-    expect(createPeerMock).toHaveBeenCalledWith({code:"bad code"})
+    expect(createPeerMock).toHaveBeenCalledWith({code: "bad code"})
     expect(screen.getByText('Incorrect Code')).toBeInTheDocument()
   })
 })

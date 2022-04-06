@@ -14,7 +14,7 @@ class SecurityConfiguration : WebSecurityConfigurerAdapter() {
     http.csrf().disable()
       .authorizeRequests()
       .antMatchers("/admin").authenticated()
-      .antMatchers("/api/admin").authenticated()
+      .antMatchers("/api/admin/**").authenticated()
       .antMatchers("/", "/home", "/webjars/**", "/public/**", "/static").permitAll()
       .antMatchers("/**/*.{js,html,css}").permitAll()
       .antMatchers("/api/**").permitAll()
