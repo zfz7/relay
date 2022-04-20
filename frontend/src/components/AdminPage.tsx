@@ -23,7 +23,6 @@ export const AdminPage: React.FC = () => {
               <Table sx={{ minWidth: 650 }} data-testid="peerTable" >
                 <TableHead>
                   <TableRow>
-                    <TableCell>UUID</TableCell>
                     <TableCell align="right">Address</TableCell>
                     <TableCell align="right">Expiration</TableCell>
                   </TableRow>
@@ -31,11 +30,8 @@ export const AdminPage: React.FC = () => {
                 {peers && <TableBody>
                   {peers.peers.map((peer) => (
                     <TableRow
-                      key={peer.id}
+                      key={peer.address}
                     >
-                      <TableCell>
-                        {peer.id}
-                      </TableCell>
                       <TableCell align="right">{peer.address}</TableCell>
                       <TableCell align="right">{peer.expiration.toDateString()}</TableCell>
                     </TableRow>

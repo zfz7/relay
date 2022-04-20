@@ -69,7 +69,6 @@ class AdminControllerTest {
 
     val response = objectMapper.readValue(result.response.contentAsByteArray, Peers::class.java)
     assertThat(response.peers).hasSize(1)
-    assertThat(response.peers[0].id).isEqualTo(publicId)
     assertThat(response.peers[0].expiration).isEqualTo(now)
     assertThat(response.peers[0].address).isEqualTo("Hello")
 

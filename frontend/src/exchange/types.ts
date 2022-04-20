@@ -16,7 +16,6 @@ export interface Peers {
 }
 
 export interface DetailedPeer {
-  id: string,
   expiration: Date
   address: string
 }

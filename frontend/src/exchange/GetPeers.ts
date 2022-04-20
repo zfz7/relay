@@ -8,7 +8,6 @@ export const getPeers: () => Promise<Peers> = () =>
     .then((dto: RawPeers) => ({
       peers: dto.peers.map(it =>
         ({
-          id: it.id,
           expiration: new Date(it.expiration),
           address: it.address
         }))
@@ -20,7 +19,6 @@ interface RawPeers {
 }
 
 interface RawPeer {
-  id: string
   expiration: number
   address: string
 }

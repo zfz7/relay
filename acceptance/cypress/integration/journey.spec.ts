@@ -40,7 +40,7 @@ describe('app', () => {
     cy.visit('/admin')
     cy.findByTestId("activeUsers") .should('have.text','Active users0')
     cy.get('tr').should('have.length', '1')
-    cy.get('tr').eq(0).should('have.text', 'UUIDAddressExpiration')
+    cy.get('tr').eq(0).should('have.text', 'AddressExpiration')
     cy.visit('/')
     cy.findByText("2) create a client config").click()
     cy.findByPlaceholderText('code').type('journey-code')

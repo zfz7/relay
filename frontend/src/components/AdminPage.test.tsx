@@ -12,7 +12,6 @@ describe('AdminPage', () => {
   beforeEach(() => {
     getPeersMock.mockResolvedValue({
       peers: [{
-        id: 'thing',
         expiration: new Date("05 October 2011 14:48"),
         address: "here"
       }]
@@ -34,7 +33,7 @@ describe('AdminPage', () => {
       await getPeersMock
     })
     const table = screen.getByTestId("peerTable")
-    expect(table.textContent).toContain('UUIDAddressExpiration');
-    expect(table.textContent).toContain('thinghereWed Oct 05 2011');
+    expect(table.textContent).toContain('AddressExpiration');
+    expect(table.textContent).toContain('hereWed Oct 05 2011');
   })
 })
