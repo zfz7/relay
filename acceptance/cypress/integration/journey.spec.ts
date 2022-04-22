@@ -11,7 +11,6 @@ describe('app', () => {
     expect(cy.contains('Relay')).exist
     expect(cy.contains('a secure connection')).exist
 
-    cy.findByText("2) create a client config").click()
     cy.findByPlaceholderText('code').type('journey-code')
     cy.findByText("create").click()
     cy.wait('@createPeer').should((xhr) => {
@@ -26,7 +25,6 @@ describe('app', () => {
 
   it('errors on bad code', () => {
     cy.visit('/')
-    cy.findByText("2) create a client config").click()
     cy.findByPlaceholderText('code').type('bad-code')
     cy.findByText("create").click()
     cy.wait('@createPeer').should((xhr) => {
@@ -42,7 +40,6 @@ describe('app', () => {
     cy.get('tr').should('have.length', '1')
     cy.get('tr').eq(0).should('have.text', 'AddressExpiration')
     cy.visit('/')
-    cy.findByText("2) create a client config").click()
     cy.findByPlaceholderText('code').type('journey-code')
     cy.findByText("create").click()
     cy.wait('@createPeer').should((xhr) => {

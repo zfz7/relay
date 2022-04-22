@@ -29,9 +29,9 @@ export const PeerCreation: React.FC = () => {
 
 
   return (<>
-      <Grid container spacing={2} direction="column" alignItems="center" justifyContent="center" style={{margin: "1rem"}}>
-        <Grid item>
-          <Typography variant={"body2"}>please enter your pre shared code</Typography>
+      <Grid container spacing={2} direction="column" alignItems="center" justifyContent="center" style={{width: "100%", marginLeft:'0'}}>
+        <Grid item sx={{mt:"1rem"}}>
+          <Typography variant={"body2"}>please enter your pre-shared code</Typography>
         </Grid>
         <Grid item>
           <TextField
@@ -46,11 +46,11 @@ export const PeerCreation: React.FC = () => {
             onChange={(event) => setCode(event.target.value)}
           />
         </Grid>
+      {disabled &&<LinearProgress style={{ width: '100%', marginTop:'1rem' }}value={100} color="primary"/>}
         <Grid item>
-          <Button disabled={disabled || !code} variant="contained" color="secondary"
+          <Button disabled={disabled || !code} variant="contained" color="primary"
                   onClick={createNewPeer}>create</Button>
         </Grid>
-      {disabled &&<LinearProgress style={{ width: '100%' }}value={100} color="secondary"/>}
       </Grid>
       <PeerDialog
         open={open}

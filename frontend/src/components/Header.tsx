@@ -1,21 +1,17 @@
 import React from "react"
-import {AppBar, Grid, IconButton, Typography, useTheme} from "@mui/material"
-import logo from "../styles/images/logo.png"
+import {AppBar, Grid, IconButton, Typography} from "@mui/material"
+import logo from "../styles/images/logo-white.png"
 
 export const Header: React.FC = () => {
-  const theme = useTheme()
   return (
     <AppBar
-      color="inherit"
-      style={{
-        backgroundColor: theme.palette.primary.light,
-      }}
+      color="primary"
       position="sticky"
-      elevation={1}
+      elevation={0}
     >
       <Grid container alignItems="center" style={{margin:"4px"}}>
         <Grid item>
-          <IconButton size={"small"} edge="start" style={{marginLeft: "1rem"}}>
+          <IconButton size={"small"} edge="start" style={{marginLeft: "0.5rem"}}>
             <img src={logo} alt="Logo" width="40px"/>
           </IconButton>
         </Grid>
