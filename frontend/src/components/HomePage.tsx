@@ -80,7 +80,7 @@ export const HomePage: React.FC = () => {
                       <img src={android} alt="andriod logo" width="25px" style={{marginRight: '.75rem'}}/>Android
                     </Button>
                     <Button variant="contained"
-                            href="https://www.wireguard.com/install/">Other Platforms
+                            href="https://www.wireguard.com/install/">Others
                     </Button>
                   </ListItem>
                 </List>
