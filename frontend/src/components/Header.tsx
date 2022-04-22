@@ -1,6 +1,6 @@
 import React from "react"
 import {AppBar, Grid, IconButton, Typography} from "@mui/material"
-import logo from "../styles/images/logo-white.png"
+import logo from "../styles/images/logo-white.webp"
 
 export const Header: React.FC = () => {
   return (

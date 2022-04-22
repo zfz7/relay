@@ -6,11 +6,11 @@ import SecurityIcon from '@mui/icons-material/Security';
 import LockIcon from '@mui/icons-material/Lock';
 import CellWifiIcon from '@mui/icons-material/CellWifi';
 import MobileFriendlyIcon from '@mui/icons-material/MobileFriendly';
-import map from "../styles/images/global-digital-map.jpeg"
-import windows from "../styles/images/windows.png"
-import mac from "../styles/images/mac.png"
-import ios from "../styles/images/ios.png"
-import android from "../styles/images/android.png"
+import map from "../styles/images/global-digital-map.webp"
+import windows from "../styles/images/windows.webp"
+import mac from "../styles/images/mac.webp"
+import ios from "../styles/images/ios.webp"
+import android from "../styles/images/android.webp"
 
 export const HomePage: React.FC = () => {
 
@@ -57,8 +57,8 @@ export const HomePage: React.FC = () => {
                 <Typography variant="h5" component="div">
                   Install VPN client
                 </Typography>
-                <Typography>Download the official WireGuard clients <Link
-                  href="https://www.wireguard.com/install/">here</Link>, or click the links below:</Typography>
+                <Typography>Download the official <Link
+                  href="https://www.wireguard.com/install/">WireGuard clients</Link>, or click the links below:</Typography>
                 <List>
                   <ListItem>
                     <Button variant="contained" sx={{marginRight: '1rem'}}
@@ -80,7 +80,7 @@ export const HomePage: React.FC = () => {
                       <img src={android} alt="andriod logo" width="25px" style={{marginRight: '.75rem'}}/>Android
                     </Button>
                     <Button variant="contained"
-                            href="https://www.wireguard.com/install/">Others
+                            href="https://www.wireguard.com/install/">Other Platforms
                     </Button>
                   </ListItem>
                 </List>
