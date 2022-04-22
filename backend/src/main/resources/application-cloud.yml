@@ -24,3 +24,5 @@ server:
     key-store-password: relay
     keyStoreType: PKCS12
     keyAlias: tomcat
+  http2:
+    enabled: true
