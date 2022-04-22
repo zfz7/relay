@@ -19,7 +19,7 @@ export const HomePage: React.FC = () => {
       <Grid container direction="row">
         <Grid xs={12} container item sx={{height: 'calc(100vh - 58px)', backgroundColor: '#0E0C19'}}>
           <Grid sm={6} container item alignItems="center" justifyContent="center">
-            <Typography variant="h4" color="white">access the whole internet</Typography>
+            <Typography variant="h4" color="white" align="center">access the whole internet</Typography>
           </Grid>
           <Grid sm={6} container item alignItems="center" justifyContent="left">
             <img src={map} alt="digital map" width="100%"/>
