@@ -2,6 +2,9 @@
 
 set -e
 
+git update-index --refresh
+git diff-index --quiet HEAD --
+
 ssh relay "sudo certbot certificates"
 ssh relay "sudo certbot certonly --standalone -d relay.zfz7.org -n"
 ssh relay "sudo openssl pkcs12 -export -in /etc/letsencrypt/live/relay.zfz7.org/fullchain.pem -inkey /etc/letsencrypt/live/relay.zfz7.org/privkey.pem -out /etc/letsencrypt/live/relay.zfz7.org/keystore.p12 -name tomcat -CAfile /etc/letsencrypt/live/relay.zfz7.org/chain.pem -caname root -passout pass:relay"

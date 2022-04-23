@@ -2,6 +2,9 @@
 
 set -e
 
+git update-index --refresh
+git diff-index --quiet HEAD --
+
 ./gradlew clean test build
 
 ssh relay "sudo killall java" || echo "No Java process running"
