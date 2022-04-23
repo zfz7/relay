@@ -44,7 +44,21 @@ fun InvalidAccessCodeEvent.toLogEvent(): LogEvent = LogEvent(
   logType = LogType.INVALID_ACCESS_CODE
 )
 
+data class PeerRemovedEvent(
+  val createdDate: Instant = Instant.now(),
+  val peerAddress: String,
+)
+
+fun PeerRemovedEvent.toLogEvent(): LogEvent = LogEvent(
+  createdDate = createdDate,
+  message = "[$createdDate] An expired peer was removed. Peer address: $peerAddress",
+  key1 = peerAddress,
+  logType = LogType.PEER_REMOVED
+)
+
+
 enum class LogType {
   INVALID_ADMIN_ACCESS,
-  INVALID_ACCESS_CODE
+  INVALID_ACCESS_CODE,
+  PEER_REMOVED
 }

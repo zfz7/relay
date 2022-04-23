@@ -211,5 +211,11 @@ class PeerControllerTest {
     val peers = peerRepository.findAll()
     assertThat(peers.size).isEqualTo(1)
     assertThat(peers[0].address).isEqualTo("10.0.0.2/32")
+
+    val logs = logEventRepository.findAll()
+    assertThat(logs.size).isEqualTo(1)
+    assertThat(logs[0].key1).isEqualTo("10.0.0.1/32")
+    assertThat(logs[0].message).contains("An expired peer was removed. Peer address: 10.0.0.1/32")
+    assertThat(logs[0].logType).isEqualTo(LogType.PEER_REMOVED)
   }
 }
