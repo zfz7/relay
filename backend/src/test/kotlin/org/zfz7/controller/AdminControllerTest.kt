@@ -20,8 +20,8 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import org.zfz7.domain.LogType
-import org.zfz7.domain.Peer
+import org.zfz7.domain.*
+import org.zfz7.exchange.Logs
 import org.zfz7.exchange.Peers
 import org.zfz7.repository.LogEventRepository
 import org.zfz7.repository.PeerRepository
@@ -131,5 +131,48 @@ class AdminControllerTest {
     )
       .andExpect(status().isFound)
       .andReturn()
+  }
+
+  @Test
+  @DisplayName("Will error on accessing logs with a unknown user")
+  @WithMockUser
+  fun `Will error on accessing logs with a unknown user`() {
+    mockMvc.perform(
+      MockMvcRequestBuilders.get("/api/admin/logs")
+        .contentType(MediaType.APPLICATION_JSON)
+        .with(oidcLogin().oidcUser(badUser))
+    )
+      .andExpect(status().isForbidden)
+      .andReturn()
+  }
+
+  @Test
+  @WithMockUser
+  fun `Returns correct logs`() {
+    logEventRepository.saveAll(listOf(
+      InvalidAccessCodeEvent(ipAddress = "CHINA").toLogEvent(),
+      InvalidAdminAccessEvent(username = "Bad guy").toLogEvent(),
+      PeerRemovedEvent(peerAddress = "RUSSIA").toLogEvent(),
+      PeerRemovedEvent(peerAddress = "RUSSIA2").toLogEvent()
+    ))
+
+    val result = mockMvc.perform(
+      MockMvcRequestBuilders.get("/api/admin/logs")
+        .contentType(MediaType.APPLICATION_JSON)
+        .with(oidcLogin().oidcUser(adminUser))
+    )
+      .andExpect(status().isOk)
+      .andReturn()
+
+    val response = objectMapper.readValue(result.response.contentAsByteArray, Logs::class.java)
+    assertThat(response.invalidAccessCodeEvents).hasSize(1)
+    assertThat(response.invalidAccessCodeEvents[0].ipAddress).isEqualTo("CHINA")
+
+    assertThat(response.invalidAdminAccessEvents).hasSize(1)
+    assertThat(response.invalidAdminAccessEvents[0].username).isEqualTo("Bad guy")
+
+    assertThat(response.peerRemovedEvents).hasSize(2)
+    assertThat(response.peerRemovedEvents[0].peerAddress).isEqualTo("RUSSIA")
+    assertThat(response.peerRemovedEvents[1].peerAddress).isEqualTo("RUSSIA2")
   }
 }

@@ -31,6 +31,10 @@ fun InvalidAdminAccessEvent.toLogEvent(): LogEvent = LogEvent(
   key1 = username,
   logType = LogType.INVALID_ADMIN_ACCESS
 )
+fun LogEvent.toInvalidAdminAccessEvent(): InvalidAdminAccessEvent = InvalidAdminAccessEvent(
+  createdDate = createdDate,
+  username = key1 ?: "null"
+)
 
 data class InvalidAccessCodeEvent(
   val createdDate: Instant = Instant.now(),
@@ -44,6 +48,10 @@ fun InvalidAccessCodeEvent.toLogEvent(): LogEvent = LogEvent(
   logType = LogType.INVALID_ACCESS_CODE
 )
 
+fun LogEvent.toInvalidAccessCodeEvent(): InvalidAccessCodeEvent = InvalidAccessCodeEvent(
+  createdDate = createdDate,
+  ipAddress = key1 ?: "null"
+)
 data class PeerRemovedEvent(
   val createdDate: Instant = Instant.now(),
   val peerAddress: String,
@@ -56,6 +64,10 @@ fun PeerRemovedEvent.toLogEvent(): LogEvent = LogEvent(
   logType = LogType.PEER_REMOVED
 )
 
+fun LogEvent.toPeerRemovedEvent(): PeerRemovedEvent = PeerRemovedEvent(
+  createdDate = createdDate,
+  peerAddress = key1 ?: "null"
+)
 
 enum class LogType {
   INVALID_ADMIN_ACCESS,
