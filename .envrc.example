@@ -1,2 +1,6 @@
-export WG_CODE="test_code"
-export POSTGRES_DB_PASSWORD="password"
+export WG_CODE="example"
+export POSTGRES_DB_PASSWORD="example"
+export GITHUB_DEV_CLIENT_ID="example"
+export GITHUB_DEV_CLIENT_SECRET="example"
+export GITHUB_PROD_CLIENT_ID="example"
+export GITHUB_PROD_CLIENT_SECRET="example"
