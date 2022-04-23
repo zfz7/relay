@@ -20,8 +20,10 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.zfz7.domain.LogType
 import org.zfz7.domain.Peer
 import org.zfz7.exchange.Peers
+import org.zfz7.repository.LogEventRepository
 import org.zfz7.repository.PeerRepository
 import java.time.Instant
 import java.util.*
@@ -34,6 +36,9 @@ class AdminControllerTest {
   private lateinit var peerRepository: PeerRepository
 
   @Autowired
+  private lateinit var logEventRepository: LogEventRepository
+
+  @Autowired
   private lateinit var mockMvc: MockMvc
 
   @Autowired
@@ -44,6 +49,11 @@ class AdminControllerTest {
   val adminUser: OidcUser = DefaultOidcUser(
     AuthorityUtils.createAuthorityList("SCOPE_message:read"),
     OidcIdToken.withTokenValue("id-token").claim("login", "zfz7").build(),
+    "login"
+  )
+  val badUser: OidcUser = DefaultOidcUser(
+    AuthorityUtils.createAuthorityList("SCOPE_message:read"),
+    OidcIdToken.withTokenValue("id-token").claim("login", "bad").build(),
     "login"
   )
 
@@ -85,6 +95,31 @@ class AdminControllerTest {
     )
       .andExpect(status().isForbidden)
       .andReturn()
+
+    val logs = logEventRepository.findAll()
+    assertThat(logs.size).isEqualTo(1)
+    assertThat(logs[0].key1).isEqualTo("UNKNOWN")
+    assertThat(logs[0].message).contains("An invalid github user: UNKNOWN, has tried to access the admin page at")
+    assertThat(logs[0].logType).isEqualTo(LogType.INVALID_ADMIN_ACCESS)
+  }
+
+  @Test
+  @DisplayName("Will error and record failed login attempt")
+  @WithMockUser
+  fun `Will error and record failed login attempt`() {
+    mockMvc.perform(
+      MockMvcRequestBuilders.get("/api/admin/peers")
+        .contentType(MediaType.APPLICATION_JSON)
+        .with(oidcLogin().oidcUser(badUser))
+    )
+      .andExpect(status().isForbidden)
+      .andReturn()
+
+    val logs = logEventRepository.findAll()
+    assertThat(logs.size).isEqualTo(1)
+    assertThat(logs[0].key1).isEqualTo("bad")
+    assertThat(logs[0].message).contains("An invalid github user: bad, has tried to access the admin page at")
+    assertThat(logs[0].logType).isEqualTo(LogType.INVALID_ADMIN_ACCESS)
   }
 
   @Test
