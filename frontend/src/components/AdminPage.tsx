@@ -9,7 +9,7 @@ import {
 import {getLogs} from "../exchange/GetLogs";
 
 export const AdminPage: React.FC = () => {
-  const [peers, setPeers] = useState<Peers>({peers: []})
+  const [peers, setPeers] = useState<Peers>()
   const [logs, setLogs] = useState<Logs>()
 
   const theme = useTheme()
@@ -28,7 +28,7 @@ export const AdminPage: React.FC = () => {
       <Grid sx={{mt: '1rem'}} container direction="row" spacing={2}>
         <Grid item xs={9}>
           <TableContainer component={Paper}>
-            <Table sx={{minWidth: 650}} data-testid="peerTable">
+            <Table data-testid="peerTable">
               <TableHead>
                 <TableRow>
                   <TableCell align="left">Address</TableCell>
@@ -40,7 +40,7 @@ export const AdminPage: React.FC = () => {
                   <TableRow
                     key={peer.address}
                   >
-                    <TableCell align="right">{peer.address}</TableCell>
+                    <TableCell align="left">{peer.address}</TableCell>
                     <TableCell align="right">{peer.expiration.toDateString()}</TableCell>
                   </TableRow>
                 ))}
@@ -76,7 +76,6 @@ export const AdminPage: React.FC = () => {
         </Grid>
       </Grid>
       </Container>
-
     </>
   )
 }
