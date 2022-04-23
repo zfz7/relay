@@ -31,7 +31,7 @@ export const AdminPage: React.FC = () => {
                 </TableRow>
               </TableHead>
               {peers && <TableBody>
-                {peers.peers.map((peer) => (
+                {peers.peers.sort((a, b) => a.expiration.getTime() - b.expiration.getTime()).map((peer) => (
                   <TableRow
                     key={peer.address}
                   >
