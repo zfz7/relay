@@ -27,11 +27,24 @@ data class InvalidAdminAccessEvent(
 
 fun InvalidAdminAccessEvent.toLogEvent(): LogEvent = LogEvent(
   createdDate = createdDate,
-  message = "An invalid github user: $username, has tried to access the admin page at $createdDate",
+  message = "[$createdDate] An invalid github user: $username, has tried to access the admin page.",
   key1 = username,
   logType = LogType.INVALID_ADMIN_ACCESS
 )
 
+data class InvalidAccessCodeEvent(
+  val createdDate: Instant = Instant.now(),
+  val ipAddress: String,
+)
+
+fun InvalidAccessCodeEvent.toLogEvent(): LogEvent = LogEvent(
+  createdDate = createdDate,
+  message = "[$createdDate] An invalid credential request from this address: $ipAddress",
+  key1 = ipAddress,
+  logType = LogType.INVALID_ACCESS_CODE
+)
+
 enum class LogType {
-  INVALID_ADMIN_ACCESS
+  INVALID_ADMIN_ACCESS,
+  INVALID_ACCESS_CODE
 }

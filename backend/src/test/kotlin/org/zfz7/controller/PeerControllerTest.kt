@@ -17,10 +17,12 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.zfz7.domain.LogType
 import org.zfz7.domain.Peer
 import org.zfz7.exchange.PeerConfigRequest
 import org.zfz7.exchange.PeerDTO
 import org.zfz7.exchange.PeerRequest
+import org.zfz7.repository.LogEventRepository
 import org.zfz7.repository.PeerRepository
 import org.zfz7.service.PeerService
 import org.zfz7.service.WgService
@@ -36,6 +38,9 @@ class PeerControllerTest {
 
   @Autowired
   private lateinit var peerService: PeerService
+
+  @Autowired
+  private lateinit var logEventRepository: LogEventRepository
 
   @Autowired
   private lateinit var wgService: WgService
@@ -97,6 +102,12 @@ class PeerControllerTest {
       .andExpect(status().isBadRequest)
       .andReturn()
     assertThat(peerRepository.findAll().size).isEqualTo(0)
+
+    val logs = logEventRepository.findAll()
+    assertThat(logs.size).isEqualTo(1)
+    assertThat(logs[0].key1).isEqualTo("127.0.0.1")
+    assertThat(logs[0].message).contains("An invalid credential request from this address: 127.0.0.1")
+    assertThat(logs[0].logType).isEqualTo(LogType.INVALID_ACCESS_CODE)
   }
 
   @Test

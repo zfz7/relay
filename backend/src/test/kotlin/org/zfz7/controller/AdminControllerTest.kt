@@ -99,7 +99,7 @@ class AdminControllerTest {
     val logs = logEventRepository.findAll()
     assertThat(logs.size).isEqualTo(1)
     assertThat(logs[0].key1).isEqualTo("UNKNOWN")
-    assertThat(logs[0].message).contains("An invalid github user: UNKNOWN, has tried to access the admin page at")
+    assertThat(logs[0].message).contains("An invalid github user: UNKNOWN, has tried to access the admin page.")
     assertThat(logs[0].logType).isEqualTo(LogType.INVALID_ADMIN_ACCESS)
   }
 
@@ -118,7 +118,7 @@ class AdminControllerTest {
     val logs = logEventRepository.findAll()
     assertThat(logs.size).isEqualTo(1)
     assertThat(logs[0].key1).isEqualTo("bad")
-    assertThat(logs[0].message).contains("An invalid github user: bad, has tried to access the admin page at")
+    assertThat(logs[0].message).contains("An invalid github user: bad, has tried to access the admin page.")
     assertThat(logs[0].logType).isEqualTo(LogType.INVALID_ADMIN_ACCESS)
   }
 
