@@ -27,7 +27,7 @@ describe('AdminPage', () => {
       await getPeersMock
     })
     const activeUsers = screen.getByTestId('activeUsers');
-    expect(activeUsers.textContent).toEqual('Active users1');
+    expect(activeUsers.textContent).toEqual('Active users2');
   })
 
   it('renders table of users and sorts them', async () => {
