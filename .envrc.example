@@ -1,3 +1,7 @@
+export RELAY_URL="example.com"
+export RELAY_SSH_PORT="22"
+export RELAY_SSH_USER="ubuntu"
+
 export WG_CODE="example"
 export POSTGRES_DB_PASSWORD="example"
 export GITHUB_DEV_CLIENT_ID="example"

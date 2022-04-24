@@ -26,29 +26,7 @@ export const AdminPage: React.FC = () => {
       <Header/>
       <Container>
         <Grid sx={{mt: '1rem'}} container direction="row" spacing={2}>
-          <Grid item xs={9}>
-            <TableContainer component={Paper}>
-              <Table data-testid="peerTable">
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="left">Address</TableCell>
-                    <TableCell align="right">Expiration</TableCell>
-                  </TableRow>
-                </TableHead>
-                {peers && <TableBody>
-                  {peers.peers.sort((a, b) => a.expiration.getTime() - b.expiration.getTime()).map((peer) => (
-                    <TableRow
-                      key={peer.address}
-                    >
-                      <TableCell align="left">{peer.address}</TableCell>
-                      <TableCell align="right">{peer.expiration.toDateString()}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>}
-              </Table>
-            </TableContainer>
-          </Grid>
-          <Grid item xs={3}>
+          <Grid item md={3}>
             <Card sx={{backgroundColor: theme.palette.primary.light}} raised data-testid="activeUsers">
               <CardContent>
                 <Typography>Active users</Typography>
@@ -73,6 +51,28 @@ export const AdminPage: React.FC = () => {
                 <Typography variant="h3">{logs?.peerRemovedEvents.length}</Typography>
               </CardContent>
             </Card>
+          </Grid>
+          <Grid item md={9}>
+            <TableContainer component={Paper}>
+              <Table data-testid="peerTable">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="left">Address</TableCell>
+                    <TableCell align="right">Expiration</TableCell>
+                  </TableRow>
+                </TableHead>
+                {peers && <TableBody>
+                  {peers.peers.sort((a, b) => a.expiration.getTime() - b.expiration.getTime()).map((peer) => (
+                    <TableRow
+                      key={peer.address}
+                    >
+                      <TableCell align="left">{peer.address}</TableCell>
+                      <TableCell align="right">{peer.expiration.toDateString()}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>}
+              </Table>
+            </TableContainer>
           </Grid>
         </Grid>
       </Container>
