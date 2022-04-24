@@ -3,14 +3,12 @@ package org.zfz7.controller
 import org.springframework.core.io.InputStreamResource
 import org.springframework.http.*
 import org.springframework.web.bind.annotation.*
-import org.zfz7.domain.InvalidAccessCodeEvent
-import org.zfz7.domain.toLogEvent
 import org.zfz7.exchange.PeerConfigRequest
 import org.zfz7.exchange.PeerDTO
 import org.zfz7.exchange.PeerRequest
 import org.zfz7.exchange.toDto
-import org.zfz7.repository.LogEventRepository
 import org.zfz7.service.CodeService
+import org.zfz7.service.LogService
 import org.zfz7.service.PeerService
 import javax.servlet.http.HttpServletRequest
 
@@ -20,7 +18,7 @@ import javax.servlet.http.HttpServletRequest
 class PeerController(
   val peerService: PeerService,
   val codeService: CodeService,
-  val logEventRepository: LogEventRepository
+  val logService: LogService,
 ) {
 
   @PostMapping()
@@ -29,7 +27,7 @@ class PeerController(
       codeService.checkCode(body.code)
       return ResponseEntity.accepted().body(peerService.createNewPeer().toDto())
     } catch (e: Exception) {
-      logEventRepository.save(InvalidAccessCodeEvent(ipAddress = request.remoteAddr).toLogEvent())
+      logService.logInvalidAccessCodeEvent(request.remoteAddr)
       ResponseEntity(HttpStatus.BAD_REQUEST)
     }
   }

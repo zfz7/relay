@@ -4,10 +4,8 @@ import org.springframework.context.annotation.Profile
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Component
-import org.zfz7.domain.InvalidAdminAccessEvent
-import org.zfz7.domain.toLogEvent
 import org.zfz7.exchange.PrincipalForbiddenException
-import org.zfz7.repository.LogEventRepository
+import org.zfz7.service.LogService
 import java.security.Principal
 
 interface PrincipalValidator{
@@ -16,7 +14,7 @@ interface PrincipalValidator{
 
 @Component
 @Profile("!integration")
-class GithubPrincipalValidator(val logEventRepository: LogEventRepository): PrincipalValidator {
+class GithubPrincipalValidator(val logService: LogService): PrincipalValidator {
   override fun validate(principal: Principal?){
     if(principal is OAuth2AuthenticationToken) {
       val oAuth2AuthenticationToken:OAuth2AuthenticationToken = principal
@@ -25,10 +23,10 @@ class GithubPrincipalValidator(val logEventRepository: LogEventRepository): Prin
       if(attributes["login"] == "zfz7"){
         return
       }
-      logEventRepository.save(InvalidAdminAccessEvent(username = attributes["login"] as String).toLogEvent())
+      logService.logInvalidAdminAccessEvent(attributes["login"] as String)
       throw PrincipalForbiddenException()
     }
-    logEventRepository.save(InvalidAdminAccessEvent(username = "UNKNOWN").toLogEvent())
+    logService.logInvalidAdminAccessEvent("UNKNOWN")
     throw PrincipalForbiddenException()
   }
 }

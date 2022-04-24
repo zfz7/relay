@@ -4,11 +4,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.zfz7.domain.Peer
-import org.zfz7.domain.PeerRemovedEvent
-import org.zfz7.domain.toLogEvent
 import org.zfz7.exchange.ConfFile
 import org.zfz7.exchange.NotFoundException
-import org.zfz7.repository.LogEventRepository
 import org.zfz7.repository.PeerRepository
 import org.zfz7.repository.RelayRepository
 import java.io.ByteArrayInputStream
@@ -23,7 +20,7 @@ class PeerService(
   val peerRepository: PeerRepository,
   val relayRepository: RelayRepository,
   val wgService: WgService,
-  val logEventRepository: LogEventRepository
+  val logService: LogService
 ) {
   var formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("ddMMM")
     .withLocale(Locale.US)
@@ -85,7 +82,7 @@ class PeerService(
     if(peersToRemove.isNotEmpty()){
       peerRepository.deleteAll(peersToRemove)
       wgService.writeRelayConfigFile()
-      logEventRepository.saveAll(peersToRemove.map{PeerRemovedEvent(peerAddress = it.address).toLogEvent()})
+      logService.logRemovedPeers(peersToRemove)
     }
     logger.info("${peersToRemove.size} peers removed")
   }
