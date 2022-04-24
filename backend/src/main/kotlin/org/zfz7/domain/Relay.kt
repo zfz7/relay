@@ -1,11 +1,6 @@
 package org.zfz7.domain
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import org.zfz7.exchange.PeerDTO
-import java.security.PrivateKey
-import java.time.Instant
-import java.time.temporal.ChronoUnit
-import java.util.*
 import javax.persistence.*
 
 @Entity
