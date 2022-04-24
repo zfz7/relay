@@ -16,3 +16,6 @@ spring:
 
 codeService:
   code: ${WG_CODE}
+
+relay:
+  disableLogs: false

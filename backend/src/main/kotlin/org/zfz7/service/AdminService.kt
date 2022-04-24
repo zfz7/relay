@@ -1,6 +1,6 @@
 package org.zfz7.service
 
- import org.springframework.stereotype.Service
+import org.springframework.stereotype.Service
 import org.zfz7.exchange.Peers
 import org.zfz7.exchange.toDetailedDto
 import org.zfz7.repository.PeerRepository

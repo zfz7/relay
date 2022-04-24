@@ -17,3 +17,6 @@ spring:
             clientSecret: something
 codeService:
   code: test-code
+
+relay:
+  disableLogs: false
