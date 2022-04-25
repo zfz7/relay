@@ -81,7 +81,7 @@ class PeerControllerTest {
 
     val response = objectMapper.readValue(result.response.contentAsByteArray, PeerDTO::class.java)
     assertThat(response.id).isNotNull
-    assertThat(response.expiration).isEqualTo(now.plus(180, ChronoUnit.DAYS))
+    assertThat(response.expiration).isEqualTo(now.plus(10, ChronoUnit.DAYS))
 
     assertThat(peerRepository.findAll().size).isEqualTo(1)
     assertThat(peerRepository.findAll()[0].endPoint).isEqualTo("example.com:51820")
@@ -166,6 +166,7 @@ class PeerControllerTest {
       endPoint = "example.com:51820",
       preSharedKey = "DEF",
       publicKey = "GHI",
+      expiration = Instant.now()
     ))
     peer =  peerService.createNewPeer()
     assertThat(peer.address).isEqualTo("10.0.1.0/32")
@@ -179,6 +180,7 @@ class PeerControllerTest {
       endPoint = "example.com:51820",
       preSharedKey = "DEF",
       publicKey = "GHI",
+      expiration = Instant.now()
     ))
     peer =  peerService.createNewPeer()
     assertThat(peer.address).isEqualTo("10.0.255.255/32")

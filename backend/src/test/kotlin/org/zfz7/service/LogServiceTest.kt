@@ -10,6 +10,7 @@ import org.zfz7.domain.LogEvent
 import org.zfz7.domain.LogType
 import org.zfz7.domain.Peer
 import org.zfz7.repository.LogEventRepository
+import java.time.Instant
 
 @SpringBootTest(properties = [ "relayConfig.disableLogs=true" ])
 @AutoConfigureMockMvc
@@ -34,7 +35,7 @@ class LogServiceTest {
 
   @Test
   fun `logRemovedPeers does not save when disableLogs is true`() {
-    logService.logRemovedPeers(listOf(Peer( address="", preSharedKey = "", privateKey = "", publicKey = "", endPoint = "")))
+    logService.logRemovedPeers(listOf(Peer( address="", preSharedKey = "", privateKey = "", publicKey = "", endPoint = "", expiration = Instant.now())))
     assertThat(logEventRepository.findAll()).hasSize(0)
   }
 

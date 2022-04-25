@@ -14,6 +14,7 @@ import java.io.InputStream
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 @Service
@@ -25,7 +26,9 @@ class PeerService(
   @Value("\${relayConfig.url}")
   val relayURL: String,
   @Value("\${relayConfig.wgPort}")
-  val relayWgPort: Int
+  val relayWgPort: Int,
+  @Value("\${relayConfig.clientValidDuration}")
+  val clientValidDuration: Long
 ) {
   var formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("ddMMM")
     .withLocale(Locale.US)
@@ -39,7 +42,8 @@ class PeerService(
       privateKey = privateKey,
       preSharedKey = wgService.getPreSharedKey(),
       publicKey = wgService.getPublicKey(privateKey),
-      endPoint = "$relayURL:$relayWgPort"
+      endPoint = "$relayURL:$relayWgPort",
+      expiration = Instant.now().plus(clientValidDuration, ChronoUnit.DAYS)
     ))
     wgService.writeRelayConfigFile()
     return peer

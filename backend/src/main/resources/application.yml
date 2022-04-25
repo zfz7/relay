@@ -21,3 +21,4 @@ relayConfig:
   disableLogs: false
   url: ${RELAY_URL}
   wgPort: ${RELAY_WG_PORT}
+  clientValidDuration: 180

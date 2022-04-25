@@ -22,3 +22,4 @@ relayConfig:
   disableLogs: false
   url: example.com
   wgPort: 51820
+  clientValidDuration: 10
