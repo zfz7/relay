@@ -9,7 +9,7 @@ import org.zfz7.repository.LogEventRepository
 @Service
 class LogService(
   val logEventRepository: LogEventRepository,
-  @Value("\${relay.disableLogs}")
+  @Value("\${relayConfig.disableLogs}")
   val disableLogs: Boolean
 ) {
   fun getLogs(): Logs {

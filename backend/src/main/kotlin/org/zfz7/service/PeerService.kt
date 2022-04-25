@@ -1,6 +1,7 @@
 package org.zfz7.service
 
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.zfz7.domain.Peer
@@ -20,7 +21,11 @@ class PeerService(
   val peerRepository: PeerRepository,
   val relayRepository: RelayRepository,
   val wgService: WgService,
-  val logService: LogService
+  val logService: LogService,
+  @Value("\${relayConfig.url}")
+  val relayURL: String,
+  @Value("\${relayConfig.wgPort}")
+  val relayWgPort: Int
 ) {
   var formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("ddMMM")
     .withLocale(Locale.US)
@@ -33,7 +38,8 @@ class PeerService(
       address = getNextAddress(),
       privateKey = privateKey,
       preSharedKey = wgService.getPreSharedKey(),
-      publicKey = wgService.getPublicKey(privateKey)
+      publicKey = wgService.getPublicKey(privateKey),
+      endPoint = "$relayURL:$relayWgPort"
     ))
     wgService.writeRelayConfigFile()
     return peer

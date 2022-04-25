@@ -17,5 +17,7 @@ spring:
 codeService:
   code: ${WG_CODE}
 
-relay:
+relayConfig:
   disableLogs: false
+  url: ${RELAY_URL}
+  wgPort: ${RELAY_WG_PORT}

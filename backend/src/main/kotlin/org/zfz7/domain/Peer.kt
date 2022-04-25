@@ -21,7 +21,7 @@ data class Peer(
   val privateKey: String,
   //[Peer]
   val allowedIps: String = "0.0.0.0/0,::/0",
-  val endPoint: String ="relay.zfz7.org:51820",
+  val endPoint: String,
   val preSharedKey: String,
   val publicKey: String,
 )

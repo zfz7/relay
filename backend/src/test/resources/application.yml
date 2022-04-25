@@ -18,5 +18,7 @@ spring:
 codeService:
   code: test-code
 
-relay:
+relayConfig:
   disableLogs: false
+  url: example.com
+  wgPort: 51820

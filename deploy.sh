@@ -20,6 +20,8 @@ ssh $sshHost "docker-compose -f ~/app/docker-compose.prod.yml up -d"
 ssh $sshHost "docker-compose -f ~/app/docker-compose.prod.yml restart wireguard"
 ssh $sshHost "cd ~/app && sudo java -jar ./relay.jar --spring.profiles.active=cloud \
         --WG_CODE=${WG_CODE} \
+        --RELAY_URL=${RELAY_URL} \
+        --RELAY_WG_PORT=${RELAY_WG_PORT} \
         --GITHUB_PROD_CLIENT_ID=${GITHUB_PROD_CLIENT_ID} \
         --GITHUB_PROD_CLIENT_SECRET=${GITHUB_PROD_CLIENT_SECRET} \
         --POSTGRES_DB_PASSWORD=${POSTGRES_DB_PASSWORD} &"

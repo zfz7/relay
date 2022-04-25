@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
@@ -83,6 +84,7 @@ class PeerControllerTest {
     assertThat(response.expiration).isEqualTo(now.plus(180, ChronoUnit.DAYS))
 
     assertThat(peerRepository.findAll().size).isEqualTo(1)
+    assertThat(peerRepository.findAll()[0].endPoint).isEqualTo("example.com:51820")
   }
 
   @Test
@@ -117,7 +119,7 @@ class PeerControllerTest {
       address = "10.8.0.3/24,fd42:42:42::3/64",
       privateKey = "ABC",
       allowedIps = "0.0.0.0/0,::/0",
-      endPoint = "relay.zfz7.org:51820",
+      endPoint = "example.com:51820",
       preSharedKey = "DEF",
       publicKey = "GHI",
       expiration = Instant.parse("2018-11-30T18:35:24.00Z")
@@ -145,7 +147,7 @@ class PeerControllerTest {
     assertThat(fileResponse.contentAsString).contains("DNS = 10.0.0.1")
     assertThat(fileResponse.contentAsString).contains("[Peer]")
     assertThat(fileResponse.contentAsString).contains("AllowedIPs = 0.0.0.0/0,::/0")
-    assertThat(fileResponse.contentAsString).contains("Endpoint = relay.zfz7.org:51820")
+    assertThat(fileResponse.contentAsString).contains("Endpoint = example.com:51820")
     assertThat(fileResponse.contentAsString).contains("PresharedKey = DEF")
     assertThat(fileResponse.contentAsString).contains("PublicKey =")
   }
@@ -161,7 +163,7 @@ class PeerControllerTest {
       address = "10.0.0.255/32",
       privateKey = "ABC",
       allowedIps = "0.0.0.0/0,::/0",
-      endPoint = "relay.zfz7.org:51820",
+      endPoint = "example.com:51820",
       preSharedKey = "DEF",
       publicKey = "GHI",
     ))
@@ -174,7 +176,7 @@ class PeerControllerTest {
       address = "10.0.255.254/32",
       privateKey = "ABC",
       allowedIps = "0.0.0.0/0,::/0",
-      endPoint = "relay.zfz7.org:51820",
+      endPoint = "example.com:51820",
       preSharedKey = "DEF",
       publicKey = "GHI",
     ))
@@ -191,7 +193,7 @@ class PeerControllerTest {
       address = "10.0.0.1/32",
       privateKey = "ABC",
       allowedIps = "0.0.0.0/0,::/0",
-      endPoint = "relay.zfz7.org:51820",
+      endPoint = "example.com:51820",
       preSharedKey = "DEF",
       publicKey = "GHI",
       expiration = Instant.now().minus(15, ChronoUnit.DAYS)
@@ -201,7 +203,7 @@ class PeerControllerTest {
       address = "10.0.0.2/32",
       privateKey = "ABC",
       allowedIps = "0.0.0.0/0,::/0",
-      endPoint = "relay.zfz7.org:51820",
+      endPoint = "example.com:51820",
       preSharedKey = "DEF",
       publicKey = "GHI",
       expiration = Instant.now().plus(15, ChronoUnit.DAYS)

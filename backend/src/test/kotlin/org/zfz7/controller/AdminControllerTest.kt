@@ -67,7 +67,7 @@ class AdminControllerTest {
   fun `Should return the correct Admin DTO`() {
     val publicId = UUID.randomUUID()
     val now = Instant.now()
-    peerRepository.save(Peer(publicId = publicId, expiration =  now, address = "Hello", privateKey = "", preSharedKey = "", publicKey = ""))
+    peerRepository.save(Peer(publicId = publicId, expiration =  now, address = "Hello", privateKey = "", preSharedKey = "", publicKey = "", endPoint = ""))
 
     val result = mockMvc.perform(
       MockMvcRequestBuilders.get("/api/admin/peers")
