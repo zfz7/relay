@@ -4,6 +4,7 @@ describe('app', () => {
     cy.intercept({path: '/api/peer/config', method: 'POST'}).as('downloadPeer')
     cy.intercept({path: '/api/peer', method: 'POST'}).as('createPeer')
     cy.resetDatabase()
+    cy.resetCode()
   })
 
   it('lets users download a new connection file', () => {

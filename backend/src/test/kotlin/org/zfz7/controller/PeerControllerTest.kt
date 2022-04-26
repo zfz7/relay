@@ -13,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
-import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
@@ -25,8 +24,8 @@ import org.zfz7.exchange.PeerDTO
 import org.zfz7.exchange.PeerRequest
 import org.zfz7.repository.LogEventRepository
 import org.zfz7.repository.PeerRepository
+import org.zfz7.service.CodeService
 import org.zfz7.service.PeerService
-import org.zfz7.service.WgService
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
@@ -44,7 +43,7 @@ class PeerControllerTest {
   private lateinit var logEventRepository: LogEventRepository
 
   @Autowired
-  private lateinit var wgService: WgService
+  private lateinit var codeService: CodeService
 
   @Autowired
   private lateinit var mockMvc: MockMvc
@@ -62,6 +61,7 @@ class PeerControllerTest {
   @Test
   @DisplayName("Create new peer")
   fun `Should create a new peer`() {
+    codeService.updateCode("test-code")
     val now = Instant.now()
     mockkStatic(Instant::class)
     every { Instant.now() } returns now
@@ -155,61 +155,69 @@ class PeerControllerTest {
   @Test
   @DisplayName("support up to 256^2 peers")
   fun supportManyPeers() {
-    var peer =  peerService.createNewPeer()
+    var peer = peerService.createNewPeer()
     assertThat(peer.address).isEqualTo("10.0.0.2/32")
-    peer =  peerService.createNewPeer()
+    peer = peerService.createNewPeer()
     assertThat(peer.address).isEqualTo("10.0.0.3/32")
-    peerRepository.save(Peer(
-      address = "10.0.0.255/32",
-      privateKey = "ABC",
-      allowedIps = "0.0.0.0/0,::/0",
-      endPoint = "example.com:51820",
-      preSharedKey = "DEF",
-      publicKey = "GHI",
-      expiration = Instant.now()
-    ))
-    peer =  peerService.createNewPeer()
+    peerRepository.save(
+      Peer(
+        address = "10.0.0.255/32",
+        privateKey = "ABC",
+        allowedIps = "0.0.0.0/0,::/0",
+        endPoint = "example.com:51820",
+        preSharedKey = "DEF",
+        publicKey = "GHI",
+        expiration = Instant.now()
+      )
+    )
+    peer = peerService.createNewPeer()
     assertThat(peer.address).isEqualTo("10.0.1.0/32")
-    peer =  peerService.createNewPeer()
+    peer = peerService.createNewPeer()
     assertThat(peer.address).isEqualTo("10.0.1.1/32")
 
-    peerRepository.save(Peer(
-      address = "10.0.255.254/32",
-      privateKey = "ABC",
-      allowedIps = "0.0.0.0/0,::/0",
-      endPoint = "example.com:51820",
-      preSharedKey = "DEF",
-      publicKey = "GHI",
-      expiration = Instant.now()
-    ))
-    peer =  peerService.createNewPeer()
+    peerRepository.save(
+      Peer(
+        address = "10.0.255.254/32",
+        privateKey = "ABC",
+        allowedIps = "0.0.0.0/0,::/0",
+        endPoint = "example.com:51820",
+        preSharedKey = "DEF",
+        publicKey = "GHI",
+        expiration = Instant.now()
+      )
+    )
+    peer = peerService.createNewPeer()
     assertThat(peer.address).isEqualTo("10.0.255.255/32")
     assertThrows<Exception> {
-      peer =  peerService.createNewPeer()
+      peer = peerService.createNewPeer()
     }
   }
 
   @Test
   fun removePeersAfterExpiration() {
-    peerRepository.save(Peer(
-      address = "10.0.0.1/32",
-      privateKey = "ABC",
-      allowedIps = "0.0.0.0/0,::/0",
-      endPoint = "example.com:51820",
-      preSharedKey = "DEF",
-      publicKey = "GHI",
-      expiration = Instant.now().minus(15, ChronoUnit.DAYS)
-    ))
+    peerRepository.save(
+      Peer(
+        address = "10.0.0.1/32",
+        privateKey = "ABC",
+        allowedIps = "0.0.0.0/0,::/0",
+        endPoint = "example.com:51820",
+        preSharedKey = "DEF",
+        publicKey = "GHI",
+        expiration = Instant.now().minus(15, ChronoUnit.DAYS)
+      )
+    )
 
-    peerRepository.save(Peer(
-      address = "10.0.0.2/32",
-      privateKey = "ABC",
-      allowedIps = "0.0.0.0/0,::/0",
-      endPoint = "example.com:51820",
-      preSharedKey = "DEF",
-      publicKey = "GHI",
-      expiration = Instant.now().plus(15, ChronoUnit.DAYS)
-    ))
+    peerRepository.save(
+      Peer(
+        address = "10.0.0.2/32",
+        privateKey = "ABC",
+        allowedIps = "0.0.0.0/0,::/0",
+        endPoint = "example.com:51820",
+        preSharedKey = "DEF",
+        publicKey = "GHI",
+        expiration = Instant.now().plus(15, ChronoUnit.DAYS)
+      )
+    )
     peerService.removeExpiredPeers()
 
     val peers = peerRepository.findAll()

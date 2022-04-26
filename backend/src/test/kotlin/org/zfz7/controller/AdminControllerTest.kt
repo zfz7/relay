@@ -21,8 +21,10 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.zfz7.domain.*
+import org.zfz7.exchange.CodeDTO
 import org.zfz7.exchange.Logs
 import org.zfz7.exchange.Peers
+import org.zfz7.repository.CodeRepository
 import org.zfz7.repository.LogEventRepository
 import org.zfz7.repository.PeerRepository
 import java.time.Instant
@@ -37,6 +39,9 @@ class AdminControllerTest {
 
   @Autowired
   private lateinit var logEventRepository: LogEventRepository
+
+  @Autowired
+  private lateinit var codeRepository: CodeRepository
 
   @Autowired
   private lateinit var mockMvc: MockMvc
@@ -210,5 +215,98 @@ class AdminControllerTest {
     assertThat(response.peerRemovedEvents).hasSize(2)
     assertThat(response.peerRemovedEvents[0].peerAddress).isEqualTo("RUSSIA")
     assertThat(response.peerRemovedEvents[1].peerAddress).isEqualTo("RUSSIA2")
+  }
+
+  @Test
+  @WithMockUser
+  fun `Will update code and set old code to no longer be valid`() {
+    mockMvc.perform(
+      MockMvcRequestBuilders.post("/api/admin/code")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(
+          objectMapper.writeValueAsBytes(
+            CodeDTO(
+              code = "test-code"
+            )
+          )
+        )
+        .with(oidcLogin().oidcUser(admin1User))
+    )
+      .andExpect(status().isOk)
+      .andReturn()
+    var codes = codeRepository.findAll()
+    assertThat(codes).hasSize(1)
+    assertThat(codes[0].code).isEqualTo("test-code")
+    assertThat(codes[0].validUntil).isNull()
+
+    mockMvc.perform(
+      MockMvcRequestBuilders.post("/api/admin/code")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(
+          objectMapper.writeValueAsBytes(
+            CodeDTO(
+              code = "test-code1"
+            )
+          )
+        )
+        .with(oidcLogin().oidcUser(admin1User))
+    )
+      .andExpect(status().isOk)
+      .andReturn()
+    codes = codeRepository.findAll().sortedBy { it.createdDate }
+    assertThat(codes).hasSize(2)
+    assertThat(codes[0].code).isEqualTo("test-code")
+    assertThat(codes[0].validUntil).isNotNull
+    assertThat(codes[1].code).isEqualTo("test-code1")
+    assertThat(codes[1].validUntil).isNull()
+  }
+
+  @Test
+  @WithMockUser
+  fun `Will not update code when user is bad`() {
+    assertThat(codeRepository.findAll()).hasSize(0)
+    mockMvc.perform(
+      MockMvcRequestBuilders.post("/api/admin/code")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(
+          objectMapper.writeValueAsBytes(
+            CodeDTO(
+              code = "test-code"
+            )
+          )
+        )
+        .with(oidcLogin().oidcUser(badUser))
+    )
+      .andExpect(status().isForbidden)
+      .andReturn()
+    assertThat(codeRepository.findAll()).hasSize(0)
+  }
+
+  @Test
+  @WithMockUser
+  fun `Will not return code when user is bad`() {
+    mockMvc.perform(
+      MockMvcRequestBuilders.get("/api/admin/code")
+        .contentType(MediaType.APPLICATION_JSON)
+        .with(oidcLogin().oidcUser(badUser))
+    )
+      .andExpect(status().isForbidden)
+      .andReturn()
+  }
+
+  @Test
+  @WithMockUser
+  fun `Will return code when user is admin`() {
+    codeRepository.save(Code(code = "test-code"))
+    val result = mockMvc.perform(
+      MockMvcRequestBuilders.get("/api/admin/code")
+        .contentType(MediaType.APPLICATION_JSON)
+        .with(oidcLogin().oidcUser(admin1User))
+    )
+      .andExpect(status().isOk)
+      .andReturn()
+
+    val dto = objectMapper.readValue(result.response.contentAsByteArray, CodeDTO::class.java)
+    assertThat(dto.code).isEqualTo("test-code")
   }
 }

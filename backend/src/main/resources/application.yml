@@ -14,9 +14,6 @@ spring:
             clientId: ${GITHUB_DEV_CLIENT_ID}
             clientSecret: ${GITHUB_DEV_CLIENT_SECRET}
 
-codeService:
-  code: ${WG_CODE}
-
 relayConfig:
   disableLogs: false
   url: ${RELAY_URL}

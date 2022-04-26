@@ -3,7 +3,6 @@ export RELAY_WG_PORT="51820"
 export RELAY_SSH_PORT="22"
 export RELAY_SSH_USER="ubuntu"
 
-export WG_CODE="example"
 export POSTGRES_DB_PASSWORD="example"
 export GITHUB_DEV_CLIENT_ID="example"
 export GITHUB_DEV_CLIENT_SECRET="example"

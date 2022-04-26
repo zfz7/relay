@@ -9,8 +9,6 @@ spring:
 logging:
   level:
     root: OFF
-codeService:
-  code: journey-code
 relayConfig:
   disableLogs: false
   url: example.com
