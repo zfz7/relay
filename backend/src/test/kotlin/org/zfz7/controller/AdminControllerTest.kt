@@ -46,9 +46,14 @@ class AdminControllerTest {
 
   private lateinit var objectMapper: ObjectMapper
 
-  val adminUser: OidcUser = DefaultOidcUser(
+  val admin1User: OidcUser = DefaultOidcUser(
     AuthorityUtils.createAuthorityList("SCOPE_message:read"),
-    OidcIdToken.withTokenValue("id-token").claim("login", "zfz7").build(),
+    OidcIdToken.withTokenValue("id-token").claim("login", "admin1").build(),
+    "login"
+  )
+  val admin2User: OidcUser = DefaultOidcUser(
+    AuthorityUtils.createAuthorityList("SCOPE_message:read"),
+    OidcIdToken.withTokenValue("id-token").claim("login", "admin2").build(),
     "login"
   )
   val badUser: OidcUser = DefaultOidcUser(
@@ -67,12 +72,22 @@ class AdminControllerTest {
   fun `Should return the correct Admin DTO`() {
     val publicId = UUID.randomUUID()
     val now = Instant.now()
-    peerRepository.save(Peer(publicId = publicId, expiration =  now, address = "Hello", privateKey = "", preSharedKey = "", publicKey = "", endPoint = ""))
+    peerRepository.save(
+      Peer(
+        publicId = publicId,
+        expiration = now,
+        address = "Hello",
+        privateKey = "",
+        preSharedKey = "",
+        publicKey = "",
+        endPoint = ""
+      )
+    )
 
     val result = mockMvc.perform(
       MockMvcRequestBuilders.get("/api/admin/peers")
         .contentType(MediaType.APPLICATION_JSON)
-        .with(oidcLogin().oidcUser(adminUser))
+        .with(oidcLogin().oidcUser(admin1User))
     )
       .andExpect(status().isOk)
       .andReturn()
@@ -83,6 +98,25 @@ class AdminControllerTest {
     assertThat(response.peers[0].address).isEqualTo("Hello")
 
     assertThat(peerRepository.findAll().size).isEqualTo(1)
+  }
+
+  @Test
+  fun `Should return when any user is in relayConfig adminUsers`() {
+    mockMvc.perform(
+      MockMvcRequestBuilders.get("/api/admin/peers")
+        .contentType(MediaType.APPLICATION_JSON)
+        .with(oidcLogin().oidcUser(admin1User))
+    )
+      .andExpect(status().isOk)
+      .andReturn()
+
+    mockMvc.perform(
+      MockMvcRequestBuilders.get("/api/admin/peers")
+        .contentType(MediaType.APPLICATION_JSON)
+        .with(oidcLogin().oidcUser(admin2User))
+    )
+      .andExpect(status().isOk)
+      .andReturn()
   }
 
   @Test
@@ -149,17 +183,19 @@ class AdminControllerTest {
   @Test
   @WithMockUser
   fun `Returns correct logs`() {
-    logEventRepository.saveAll(listOf(
-      InvalidAccessCodeEvent(ipAddress = "CHINA").toLogEvent(),
-      InvalidAdminAccessEvent(username = "Bad guy").toLogEvent(),
-      PeerRemovedEvent(peerAddress = "RUSSIA").toLogEvent(),
-      PeerRemovedEvent(peerAddress = "RUSSIA2").toLogEvent()
-    ))
+    logEventRepository.saveAll(
+      listOf(
+        InvalidAccessCodeEvent(ipAddress = "CHINA").toLogEvent(),
+        InvalidAdminAccessEvent(username = "Bad guy").toLogEvent(),
+        PeerRemovedEvent(peerAddress = "RUSSIA").toLogEvent(),
+        PeerRemovedEvent(peerAddress = "RUSSIA2").toLogEvent()
+      )
+    )
 
     val result = mockMvc.perform(
       MockMvcRequestBuilders.get("/api/admin/logs")
         .contentType(MediaType.APPLICATION_JSON)
-        .with(oidcLogin().oidcUser(adminUser))
+        .with(oidcLogin().oidcUser(admin1User))
     )
       .andExpect(status().isOk)
       .andReturn()
