@@ -40,3 +40,7 @@ export interface PeerRemovedEvent {
   createdDate: Date
   peerAddress: string
 }
+
+export interface Code {
+  code: string,
+}

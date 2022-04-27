@@ -3,10 +3,11 @@ import {Header} from "./Header";
 import {getPeers} from "../exchange/GetPeers";
 import {Logs, Peers} from "../exchange/types";
 import {
-  Card, CardContent, Container, Grid, Paper, Table,
+  Card, CardContent, Container, Divider, Grid, Paper, Table,
   TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useTheme
 } from "@mui/material";
 import {getLogs} from "../exchange/GetLogs";
+import {CodeCard} from "./CodeCard";
 
 export const AdminPage: React.FC = () => {
   const [peers, setPeers] = useState<Peers>()
@@ -27,27 +28,32 @@ export const AdminPage: React.FC = () => {
       <Container>
         <Grid sx={{mt: '1rem'}} container direction="row" spacing={2}>
           <Grid item md={3}>
-            <Card sx={{backgroundColor: theme.palette.primary.light}} raised data-testid="activeUsers">
+            <CodeCard/>
+            <Card sx={{backgroundColor: theme.palette.primary.light, mt: '1rem'}} raised data-testid="activeUsers">
               <CardContent>
                 <Typography>Active users</Typography>
+                <Divider/>
                 <Typography variant="h3">{peers?.peers.length}</Typography>
               </CardContent>
             </Card>
             <Card sx={{backgroundColor: theme.palette.primary.light, mt: '1rem'}} raised data-testid="invalidAdmin">
               <CardContent>
                 <Typography>Invalid Admin Attempts</Typography>
+                <Divider/>
                 <Typography variant="h3">{logs?.invalidAdminAccessEvents.length}</Typography>
               </CardContent>
             </Card>
             <Card sx={{backgroundColor: theme.palette.primary.light, mt: '1rem'}} raised data-testid="invalidCode">
               <CardContent>
                 <Typography>Invalid Access Code Attempts</Typography>
+                <Divider/>
                 <Typography variant="h3">{logs?.invalidAccessCodeEvents.length}</Typography>
               </CardContent>
             </Card>
             <Card sx={{backgroundColor: theme.palette.primary.light, mt: '1rem'}} raised data-testid="removedPeers">
               <CardContent>
                 <Typography>Removed Peers</Typography>
+                <Divider/>
                 <Typography variant="h3">{logs?.peerRemovedEvents.length}</Typography>
               </CardContent>
             </Card>
