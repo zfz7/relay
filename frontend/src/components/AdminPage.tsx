@@ -27,7 +27,7 @@ export const AdminPage: React.FC = () => {
       <Header/>
       <Container>
         <Grid sx={{mt: '1rem'}} container direction="row" spacing={2}>
-          <Grid item md={3}>
+          <Grid item md={4} xs={12}>
             <CodeCard/>
             <Card sx={{backgroundColor: theme.palette.primary.light, mt: '1rem'}} raised data-testid="activeUsers">
               <CardContent>
@@ -58,7 +58,7 @@ export const AdminPage: React.FC = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item md={9}>
+          <Grid item md={8} xs={12}>
             <TableContainer component={Paper}>
               <Table data-testid="peerTable">
                 <TableHead>
