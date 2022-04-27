@@ -65,14 +65,18 @@ describe('app', () => {
     cy.findByTestId("invalidCode").should('have.text','Invalid Access Code Attempts1')
   })
 
-  it('show correct user count on admin page', () => {
+  it('Allows admin to edit and copy code', () => {
     cy.visit('/admin')
     cy.findByText("Show Code").click()
     cy.findByTestId("codeCard").should('contain.text','journey-code')
+    cy.findByRole("button",{name: 'copy'}).click()
+    cy.window().its('navigator.clipboard').invoke('readText').should('equal', 'Current code is: journey-code')
     cy.findByRole("button",{name: 'edit'}).click()
     cy.findByPlaceholderText("code").type("new-code")
     cy.findByRole("button",{name: 'save'}).click()
     cy.findByText("Show Code").click()
     cy.findByTestId("codeCard").should('contain.text','new-code')
+    cy.findByRole("button",{name: 'copy'}).click()
+    cy.window().its('navigator.clipboard').invoke('readText').should('equal', 'Current code is: new-code')
   })
 })

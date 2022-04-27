@@ -4,6 +4,7 @@ import {getCode} from "../exchange/GetCode";
 import {updateCode} from "../exchange/UpdateCode";
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 export const CodeCard: React.FC = () => {
   const [code, setCode] = useState<string>()
@@ -20,7 +21,9 @@ export const CodeCard: React.FC = () => {
           {mode === 'VIEW' && <Grid item xs={12} container justifyContent="space-between" alignItems="center">
               <Typography variant="subtitle2" display="inline" fontFamily="monospace"
                           sx={{backgroundColor: "grey"}}>{code}</Typography>
-              <IconButton aria-label={"edit"} onClick={() => setMode('EDIT')}><EditIcon/></IconButton>
+              <div><IconButton aria-label={"copy"}
+                               onClick={() => navigator.clipboard.writeText(`Current code is: ${code}`)}><ContentCopyIcon/></IconButton>
+                  <IconButton aria-label={"edit"} onClick={() => setMode('EDIT')}><EditIcon/></IconButton></div>
           </Grid>}
           {mode === 'EDIT' && <Grid item xs={12} container justifyContent="space-between" alignItems="center">
               <TextField placeholder="code" value={newCode}
