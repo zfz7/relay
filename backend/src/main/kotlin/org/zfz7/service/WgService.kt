@@ -13,7 +13,7 @@ import java.io.InputStreamReader
 
 interface WgService {
   fun getPrivateKey(): String
-  fun getPublicKey(privateKey:String): String
+  fun getPublicKey(privateKey: String): String
   fun getPreSharedKey(): String
   fun writeRelayConfigFile()
 }
@@ -21,10 +21,10 @@ interface WgService {
 
 @Service
 @Profile("!test")
-class WgServiceProd (
+class WgServiceProd(
   val relayRepository: RelayRepository,
   val peerRepository: PeerRepository,
-        ): WgService {
+) : WgService {
   private val logger = LoggerFactory.getLogger(StartUp::class.java)
 
   override fun getPrivateKey(): String {
@@ -41,13 +41,15 @@ class WgServiceProd (
     logger.info("pre shared key created")
     return runBashCommand("wg genpsk")
   }
+
   override fun writeRelayConfigFile() {
+    logger.info("writing Relay Config File")
     val relay = relayRepository.findTopBy() ?: throw NotFoundException("Relay not found")
     val peers = peerRepository.findAll()
 
-    val writer: FileWriter = try{
-      FileWriter(File("./config","wg0.conf"))
-    } catch(e: Exception){
+    val writer: FileWriter = try {
+      FileWriter(File("./config", "wg0.conf"))
+    } catch (e: Exception) {
       FileWriter("wg0.conf")
     }
 
@@ -57,7 +59,7 @@ class WgServiceProd (
     writer.write("PrivateKey = ${relay.privateKey}\n")
     writer.write(("PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE\n"))
     writer.write(("PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE\n"))
-      for (peer in peers) {
+    for (peer in peers) {
       writer.write("[Peer]\n")
       writer.write("PublicKey = ${peer.publicKey}\n")
       writer.write("PresharedKey = ${peer.preSharedKey}\n")
@@ -65,7 +67,7 @@ class WgServiceProd (
     }
     writer.close()
     runBashCommand("""echo ${'$'}{USER}""")
-    runBashCommand("docker-compose -f /home/ubuntu/app/docker-compose.prod.yml restart wireguard")
+    runBashCommand("docker restart wireguard")
   }
 
   private fun runBashCommand(command: String): String {
@@ -80,7 +82,7 @@ class WgServiceProd (
     builder.directory(File(System.getProperty("user.home")))
     val process = builder.start()
     val reader = BufferedReader(InputStreamReader(process.inputStream))
-    val line1 = reader.readLine()?: "null"
+    val line1 = reader.readLine() ?: "null"
     val exitCode = process.waitFor()
     assert(exitCode == 0)
     return line1

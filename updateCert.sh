@@ -8,11 +8,11 @@ git update-index --refresh
 git diff-index --quiet HEAD --
 
 ssh $sshHost "sudo certbot certificates"
-ssh $sshHost "sudo certbot certonly --standalone -d relay.zfz7.org -n"
-ssh $sshHost "sudo openssl pkcs12 -export -in /etc/letsencrypt/live/relay.zfz7.org/fullchain.pem -inkey /etc/letsencrypt/live/relay.zfz7.org/privkey.pem -out /etc/letsencrypt/live/relay.zfz7.org/keystore.p12 -name tomcat -CAfile /etc/letsencrypt/live/relay.zfz7.org/chain.pem -caname root -passout pass:relay"
+ssh $sshHost "sudo certbot certonly --standalone -d $RELAY_URL -n"
+ssh $sshHost "sudo openssl pkcs12 -export -in /etc/letsencrypt/live/$RELAY_URL/fullchain.pem -inkey /etc/letsencrypt/live/$RELAY_URL/privkey.pem -out /etc/letsencrypt/live/$RELAY_URL/keystore.p12 -name tomcat -CAfile /etc/letsencrypt/live/$RELAY_URL/chain.pem -caname root -passout pass:relay"
 ssh $sshHost "sudo killall java" || echo "No Java process running"
-ssh $sshHost "docker-compose -f ~/app/docker-compose.prod.yml up -d"
-ssh $sshHost "docker-compose -f ~/app/docker-compose.prod.yml restart wireguard"
+ssh $sshHost "RELAY_URL=${RELAY_URL} POSTGRES_DB_PASSWORD=${POSTGRES_DB_PASSWORD} RELAY_WG_PORT=${RELAY_WG_PORT} docker compose -f ~/app/docker-compose.prod.yml up -d"
+ssh $sshHost "RELAY_URL=${RELAY_URL} POSTGRES_DB_PASSWORD=${POSTGRES_DB_PASSWORD} RELAY_WG_PORT=${RELAY_WG_PORT} docker compose -f ~/app/docker-compose.prod.yml restart wireguard"
 ssh $sshHost "cd ~/app && sudo java -jar ./relay.jar --spring.profiles.active=cloud \
         --RELAY_URL=${RELAY_URL} \
         --RELAY_WG_PORT=${RELAY_WG_PORT} \

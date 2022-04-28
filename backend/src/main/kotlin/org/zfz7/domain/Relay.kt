@@ -11,7 +11,7 @@ data class Relay(
   val id: Long? = null,
 
   val address: String = "10.0.0.1",
-  val listenPort: String = "51820",
+  val listenPort: String,
   val privateKey: String,
   val publicKey: String,
 )

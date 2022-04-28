@@ -13,11 +13,11 @@ docker-compose up -d
 
 ssh $sshHost "sudo killall java" || echo "No Java process running"
 ssh $sshHost "sudo rm ~/app/relay.jar" || echo "No Java process running"
-ssh $sshHost "docker-compose -f ~/app/docker-compose.prod.yml down" || echo "Docker not running"
+ssh $sshHost "RELAY_URL=${RELAY_URL} POSTGRES_DB_PASSWORD=${POSTGRES_DB_PASSWORD} RELAY_WG_PORT=${RELAY_WG_PORT} docker compose -f ~/app/docker-compose.prod.yml down" || echo "Docker not running"
 scp -P "$RELAY_SSH_PORT" ./build/libs/relay.jar $scpHost:~/app/
 scp -P "$RELAY_SSH_PORT" ./docker-compose.prod.yml $scpHost:~/app/
-ssh $sshHost "docker-compose -f ~/app/docker-compose.prod.yml up -d"
-ssh $sshHost "docker-compose -f ~/app/docker-compose.prod.yml restart wireguard"
+ssh $sshHost "RELAY_URL=${RELAY_URL} POSTGRES_DB_PASSWORD=${POSTGRES_DB_PASSWORD} RELAY_WG_PORT=${RELAY_WG_PORT} docker compose -f ~/app/docker-compose.prod.yml up -d"
+ssh $sshHost "RELAY_URL=${RELAY_URL} POSTGRES_DB_PASSWORD=${POSTGRES_DB_PASSWORD} RELAY_WG_PORT=${RELAY_WG_PORT} docker compose -f ~/app/docker-compose.prod.yml restart wireguard"
 ssh $sshHost "cd ~/app && sudo java -jar ./relay.jar --spring.profiles.active=cloud \
         --RELAY_URL=${RELAY_URL} \
         --RELAY_WG_PORT=${RELAY_WG_PORT} \

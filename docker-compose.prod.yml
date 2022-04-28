@@ -4,7 +4,7 @@ services:
     image: postgres
     environment:
       POSTGRES_USER: relay
-      POSTGRES_PASSWORD: relay
+      POSTGRES_PASSWORD: ${POSTGRES_DB_PASSWORD}
       POSTGRES_DB: relay
     ports:
       - 5432:5432
@@ -17,13 +17,13 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/Los_Angeles
-      - SERVERURL=relay.zfz7.org
-      - SERVERPORT=51820
-      - PEERS=detele-me
+      - SERVERURL=${RELAY_URL}
+      - SERVERPORT=${RELAY_WG_PORT}
+      - PEERS=deleteMe
       - PEERDNS=auto
       - INTERNAL_SUBNET=10.0.0.0
     ports:
-      - 51820:51820/udp
+      - ${RELAY_WG_PORT}:${RELAY_WG_PORT}/udp
     volumes:
       - type: bind
         source: ./config/

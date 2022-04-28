@@ -24,18 +24,15 @@ apt-cache policy docker-ce
 apt install docker-ce -y
 
 #Install Docker-compose
-curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
+DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+mkdir -p $DOCKER_CONFIG/cli-plugins
+curl -SL https://github.com/docker/compose/releases/download/v2.4.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+
+sudo chmod 666 /var/run/docker.sock
 
 #Install openJDK
-apt install default-jre -y
-apt install openjdk-11-jdk -y
-
-#Install Yarn
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-apt update
-apt install yarn -y
+apt install default-jdk
 
 #Install certbot
 snap install core
@@ -45,3 +42,6 @@ snap install --classic certbot
 #Install wireguard tools
 apt install wireguard-tools
 apt install wireguard
+
+#mkdir
+mkdir -p ~/app/config

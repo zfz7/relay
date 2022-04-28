@@ -4,7 +4,7 @@ services:
     container_name: relay_dev_db
     image: postgres
     environment:
-      - POSTGRES_PASSWORD=${POSTGRES_DB_PASSWORD}
+      - POSTGRES_PASSWORD=relay
       - POSTGRES_USER=relay
       - POSTGRES_DB=relay
     ports:
