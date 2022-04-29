@@ -8,7 +8,6 @@ git diff-index --quiet HEAD --
 sshHost="-p $RELAY_SSH_PORT -C $RELAY_SSH_USER@$RELAY_URL"
 scpHost="$RELAY_SSH_USER@$RELAY_URL"
 
-docker-compose up -d
 ./gradlew clean test build
 
 ssh $sshHost "sudo killall java" || echo "No Java process running"
