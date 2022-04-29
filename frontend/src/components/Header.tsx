@@ -11,7 +11,7 @@ export const Header: React.FC = () => {
     >
       <Grid container alignItems="center" style={{margin:"4px 0"}}>
         <Grid item>
-          <IconButton size={"small"} edge="start" style={{marginLeft: "0.5rem"}}>
+          <IconButton size={"small"} edge="start" style={{marginLeft: "0.5rem"}} href="/">
             <img src={logo} alt="Logo" width="40px"/>
           </IconButton>
         </Grid>
