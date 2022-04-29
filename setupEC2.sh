@@ -11,6 +11,9 @@ function super-user-check() {
 # Check for root
 super-user-check
 
+#mkdir
+mkdir -p ~/app/config
+
 #Update System
 apt update
 apt upgrade -y
@@ -43,5 +46,3 @@ snap install --classic certbot
 apt install wireguard-tools
 apt install wireguard
 
-#mkdir
-mkdir -p ~/app/config
