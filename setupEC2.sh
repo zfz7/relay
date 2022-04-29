@@ -11,9 +11,6 @@ function super-user-check() {
 # Check for root
 super-user-check
 
-#mkdir
-mkdir -p ./app/config
-
 #Update System
 apt update
 apt upgrade -y
