@@ -14,6 +14,7 @@ else
 	./gradlew clean test build
 fi
 
+ssh $sshHost "sudo openssl pkcs12 -export -in /etc/letsencrypt/live/$RELAY_URL/fullchain.pem -inkey /etc/letsencrypt/live/$RELAY_URL/privkey.pem -out /etc/letsencrypt/live/$RELAY_URL/keystore.p12 -name tomcat -CAfile /etc/letsencrypt/live/$RELAY_URL/chain.pem -caname root -passout pass:relay"
 
 ssh $sshHost "sudo killall java" || echo "No Java process running"
 ssh $sshHost "sudo rm ~/app/relay.jar" || echo "No Java process running"
