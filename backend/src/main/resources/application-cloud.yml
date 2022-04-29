@@ -21,7 +21,7 @@ server:
   ssl:
     enabled: true
     key-store: /etc/letsencrypt/live/${RELAY_URL}/keystore.p12
-    key-store-password: relay
+    key-store-password: ${SSL_KEY_STORE_PASSWORD}
     keyStoreType: PKCS12
     keyAlias: tomcat
   http2:

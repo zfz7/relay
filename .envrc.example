@@ -4,6 +4,7 @@ export RELAY_SSH_PORT="22"
 export RELAY_SSH_USER="ubuntu"
 
 export POSTGRES_DB_PASSWORD="example"
+export SSL_KEY_STORE_PASSWORD="example"
 export GITHUB_DEV_CLIENT_ID="example"
 export GITHUB_DEV_CLIENT_SECRET="example"
 export GITHUB_PROD_CLIENT_ID="example"
