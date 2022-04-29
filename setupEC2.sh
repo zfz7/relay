@@ -46,3 +46,7 @@ snap install --classic certbot
 apt install wireguard-tools
 apt install wireguard
 
+#Update and remove  System
+apt update
+apt upgrade -y
+apt autoremove -y
