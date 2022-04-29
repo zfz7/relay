@@ -87,7 +87,7 @@ relayConfig:
   - `scp -P "$RELAY_SSH_PORT" ./setupEC2.sh $RELAY_SSH_USER@$RELAY_URL:~/`
 
 #### Step 6. create letscrypt cert
-- run `certbot certonly --standalone` then follow prompts
+- run `sudo certbot certonly --standalone` then follow prompts
 
 #### Step 7. deploy app
-- `./deploy` or `./deploy NOTEST`
+- `./deploy.sh` or `./deploy.sh NOTEST`
