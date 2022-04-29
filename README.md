@@ -90,21 +90,3 @@ relayConfig:
 
 #### Step 7. deploy app
 - `./deploy` or `./deploy NOTEST`
-
-1. Install Docker, Docker-Compose, openJDK, yarn and certbot
-    * If on Ubuntu 20 run from project root: `./setupEC2.sh`
-2. Install certs
-    * run `certbot certonly --standalone`
-3. Create keystore.p12,
-    * run from letscrypt
-      folder: `openssl pkcs12 -export -in fullchain.pem -inkey privkey.pem -out keystore.p12 -name tomcat -CAfile chain.pem -caname root`
-    * Use password `relay`
-4. Build Jar
-    * run from project root:`./gradlew clean assemble`
-5. Start all containers
-    * run from project root: `docker-compose -f docker-compose.prod.yml up -d`
-    * database is not exposed to localhost
-    * exposes app on port 80 and 443
-6. Start app
-    * run from project
-      root: `java -jar build/libs/relay.jar --spring.profiles.active=cloud --WG_CODE=changme --POSTGRES_DB_PASSWORD=${POSTGRES_DB_PASSWORD}`
