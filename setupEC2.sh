@@ -12,7 +12,7 @@ function super-user-check() {
 super-user-check
 
 #mkdir
-mkdir -p ~/app/config
+mkdir -p ./app/config
 
 #Update System
 apt update
