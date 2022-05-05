@@ -15,8 +15,6 @@ spring:
             clientSecret: ${GITHUB_DEV_CLIENT_SECRET}
 
 relayConfig:
-  disableLogs: false
   url: ${RELAY_URL}
   wgPort: ${RELAY_WG_PORT}
-  clientValidDuration: 180
   adminUsers: zfz7

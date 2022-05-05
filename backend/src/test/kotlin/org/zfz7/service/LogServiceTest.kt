@@ -1,18 +1,21 @@
 package org.zfz7.service
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.jdbc.Sql
+import org.zfz7.domain.Config
 import org.zfz7.domain.LogEvent
 import org.zfz7.domain.LogType
 import org.zfz7.domain.Peer
+import org.zfz7.repository.ConfigRepository
 import org.zfz7.repository.LogEventRepository
 import java.time.Instant
 
-@SpringBootTest(properties = [ "relayConfig.disableLogs=true" ])
+@SpringBootTest()
 @AutoConfigureMockMvc
 @Sql("classpath:setup.sql")
 class LogServiceTest {
@@ -23,7 +26,14 @@ class LogServiceTest {
   @Autowired
   private lateinit var logEventRepository: LogEventRepository
 
+  @Autowired
+  private lateinit var configRepository: ConfigRepository
 
+  @BeforeEach
+  fun beforeEach(){
+    configRepository.deleteAll()
+    configRepository.save(Config(disableLogs = true, clientValidDuration = 10))
+  }
   @Test
   fun `returns empty logs when disableLogs is true`() {
     logEventRepository.save(LogEvent(message = "thing", key1 = "thing", logType = LogType.PEER_REMOVED ))

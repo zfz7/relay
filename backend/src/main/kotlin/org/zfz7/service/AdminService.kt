@@ -1,10 +1,7 @@
 package org.zfz7.service
 
 import org.springframework.stereotype.Service
-import org.zfz7.exchange.CodeDTO
-import org.zfz7.exchange.Logs
-import org.zfz7.exchange.Peers
-import org.zfz7.exchange.toDetailedDto
+import org.zfz7.exchange.*
 import org.zfz7.repository.PeerRepository
 import org.zfz7.security.PrincipalValidator
 import java.security.Principal
@@ -14,7 +11,8 @@ class AdminService(
   val peerRepository: PeerRepository,
   val principalValidator: PrincipalValidator,
   val logService: LogService,
-  val codeService: CodeService
+  val codeService: CodeService,
+  val configService: ConfigService
 ) {
   fun getAdminPage(principal: Principal?): Peers {
     principalValidator.validate(principal)
@@ -34,5 +32,15 @@ class AdminService(
   fun getCode(principal: Principal?): CodeDTO {
     principalValidator.validate(principal)
     return CodeDTO(code = codeService.getCode()?:"")
+  }
+
+  fun getConfig(principal: Principal?): ConfigDTO {
+    principalValidator.validate(principal)
+    return configService.getConfig().toDto()
+  }
+
+  fun updateConfig(principal: Principal?, config: ConfigDTO) {
+    principalValidator.validate(principal)
+    configService.updateConfig(config)
   }
 }

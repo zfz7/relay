@@ -27,8 +27,7 @@ class PeerService(
   val relayURL: String,
   @Value("\${relayConfig.wgPort}")
   val relayWgPort: Int,
-  @Value("\${relayConfig.clientValidDuration}")
-  val clientValidDuration: Long
+  val configService: ConfigService
 ) {
   var formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("ddMMM")
     .withLocale(Locale.US)
@@ -43,7 +42,7 @@ class PeerService(
       preSharedKey = wgService.getPreSharedKey(),
       publicKey = wgService.getPublicKey(privateKey),
       endPoint = "$relayURL:$relayWgPort",
-      expiration = Instant.now().plus(clientValidDuration, ChronoUnit.DAYS)
+      expiration = Instant.now().plus(configService.getConfig().clientValidDuration.toLong(), ChronoUnit.DAYS)
     ))
     wgService.writeRelayConfigFile()
     return peer

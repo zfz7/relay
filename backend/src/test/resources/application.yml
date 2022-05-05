@@ -16,8 +16,6 @@ spring:
             clientId: something
             clientSecret: something
 relayConfig:
-  disableLogs: false
   url: example.com
   wgPort: 51820
-  clientValidDuration: 10
   adminUsers: admin1,admin2

@@ -10,6 +10,5 @@ logging:
   level:
     root: OFF
 relayConfig:
-  disableLogs: false
   url: example.com
   wgPort: 51820

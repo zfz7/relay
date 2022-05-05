@@ -22,11 +22,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.zfz7.domain.*
 import org.zfz7.exchange.CodeDTO
+import org.zfz7.exchange.ConfigDTO
 import org.zfz7.exchange.Logs
 import org.zfz7.exchange.Peers
 import org.zfz7.repository.CodeRepository
 import org.zfz7.repository.LogEventRepository
 import org.zfz7.repository.PeerRepository
+import org.zfz7.service.ConfigService
 import java.time.Instant
 import java.util.*
 
@@ -42,6 +44,9 @@ class AdminControllerTest {
 
   @Autowired
   private lateinit var codeRepository: CodeRepository
+
+  @Autowired
+  private lateinit var configService: ConfigService
 
   @Autowired
   private lateinit var mockMvc: MockMvc
@@ -308,5 +313,76 @@ class AdminControllerTest {
 
     val dto = objectMapper.readValue(result.response.contentAsByteArray, CodeDTO::class.java)
     assertThat(dto.code).isEqualTo("test-code")
+  }
+
+  @Test
+  @WithMockUser
+  fun `Will return config when user is admin`() {
+    val result = mockMvc.perform(
+      MockMvcRequestBuilders.get("/api/admin/config")
+        .contentType(MediaType.APPLICATION_JSON)
+        .with(oidcLogin().oidcUser(admin1User))
+    )
+      .andExpect(status().isOk)
+      .andReturn()
+
+    val dto = objectMapper.readValue(result.response.contentAsByteArray, ConfigDTO::class.java)
+    assertThat(dto.disableLogs).isEqualTo(false)
+    assertThat(dto.clientValidDuration).isEqualTo(10)
+  }
+
+  @Test
+  @WithMockUser
+  fun `Will not return config when user is bad`() {
+    mockMvc.perform(
+      MockMvcRequestBuilders.get("/api/admin/config")
+        .contentType(MediaType.APPLICATION_JSON)
+        .with(oidcLogin().oidcUser(badUser))
+    )
+      .andExpect(status().isForbidden)
+      .andReturn()
+  }
+
+  @Test
+  @WithMockUser
+  fun `Will update config when user is admin`() {
+    mockMvc.perform(
+      MockMvcRequestBuilders.post("/api/admin/config")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(
+          objectMapper.writeValueAsBytes(
+            ConfigDTO(
+              disableLogs = false,
+              clientValidDuration = 100
+            )
+          )
+        )
+        .with(oidcLogin().oidcUser(admin1User))
+    )
+      .andExpect(status().isOk)
+      .andReturn()
+    val config = configService.getConfig()
+    assertThat(config.disableLogs).isEqualTo(false)
+    assertThat(config.clientValidDuration).isEqualTo(100)
+  }
+
+  @Test
+  @WithMockUser
+  fun `Will not update config when user is bad`() {
+    mockMvc.perform(
+      MockMvcRequestBuilders.post("/api/admin/config")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(
+          objectMapper.writeValueAsBytes(
+            ConfigDTO(
+              disableLogs = false,
+              clientValidDuration = 100
+            )
+          )
+        )
+        .with(oidcLogin().oidcUser(badUser))
+    )
+      .andExpect(status().isForbidden)
+      .andReturn()
   }
 }

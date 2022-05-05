@@ -73,10 +73,8 @@ GITHUB_PROD_CLIENT_SECRET="example"
 - Change admin users to your GitHub username
 ```
 relayConfig:
-  disableLogs: false
   url: ${RELAY_URL}
   wgPort: ${RELAY_WG_PORT}
-  clientValidDuration: 180
   adminUsers: zfz7 
 ```
 

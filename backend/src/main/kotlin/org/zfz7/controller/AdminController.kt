@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import org.zfz7.exchange.CodeDTO
+import org.zfz7.exchange.ConfigDTO
 import org.zfz7.exchange.Logs
 import org.zfz7.exchange.Peers
 import org.zfz7.service.AdminService
@@ -26,4 +27,10 @@ class AdminController(
 
   @GetMapping("/api/admin/code")
   fun getCode(principal: Principal?): CodeDTO = adminService.getCode(principal)
+
+  @GetMapping("/api/admin/config")
+  fun getConfig(principal: Principal?): ConfigDTO = adminService.getConfig(principal)
+
+  @PostMapping("/api/admin/config")
+  fun updateCode(principal: Principal?, @RequestBody config: ConfigDTO) = adminService.updateConfig(principal, config)
 }
