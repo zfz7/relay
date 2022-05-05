@@ -54,17 +54,20 @@ tasks.withType<Test> {
 }
 
 tasks.withType<BootRun> {
-    mustRunAfter("copy_frontend_to_backend")
+    dependsOn("copy_frontend_to_backend")
 }
 
 tasks.withType<BootJar> {
-    mustRunAfter("copy_frontend_to_backend")
+    dependsOn("copy_frontend_to_backend")
     archiveBaseName.set("relay")
     archiveFileName.set("relay.jar")
+    doLast {
+        println(message = "artifact_path: ${outputs.files.files.single()}")
+    }
 }
 
 tasks.register<Sync>("copy_frontend_to_backend") {
-    mustRunAfter(":frontend:build")
+    dependsOn(":frontend:build")
     from(file("${project(":frontend").projectDir}/build"))
     into(file("$buildDir/resources/main/static"))
 }
