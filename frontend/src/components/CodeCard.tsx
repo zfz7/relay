@@ -22,7 +22,7 @@ export const CodeCard: React.FC = () => {
               <Typography variant="subtitle2" display="inline" fontFamily="monospace"
                           sx={{backgroundColor: "grey"}}>{code}</Typography>
               <div><IconButton aria-label={"copy"}
-                               onClick={() => navigator.clipboard.writeText(`Current code is: ${code}`)}><ContentCopyIcon/></IconButton>
+                               onClick={() => navigator.clipboard.writeText(`Please access your VPN credentials at: ${window.location.href.slice(0, -6)} \nCurrent code is: ${code}`)}><ContentCopyIcon/></IconButton>
                   <IconButton aria-label={"edit"} onClick={() => setMode('EDIT')}><EditIcon/></IconButton></div>
           </Grid>}
           {mode === 'EDIT' && <Grid item xs={12} container justifyContent="space-between" alignItems="center">

@@ -70,14 +70,14 @@ describe('app', () => {
     cy.findByText("Show Code").click()
     cy.findByTestId("codeCard").should('contain.text','journey-code')
     cy.findByRole("button",{name: 'copy'}).click()
-    cy.window().its('navigator.clipboard').invoke('readText').should('equal', 'Current code is: journey-code')
+    cy.window().its('navigator.clipboard').invoke('readText').should('equal', 'Please access your VPN credentials at: http://localhost:8444 \nCurrent code is: journey-code')
     cy.findByRole("button",{name: 'edit'}).click()
     cy.findByPlaceholderText("code").type("new-code")
     cy.findByRole("button",{name: 'save'}).click()
     cy.findByText("Show Code").click()
     cy.findByTestId("codeCard").should('contain.text','new-code')
     cy.findByRole("button",{name: 'copy'}).click()
-    cy.window().its('navigator.clipboard').invoke('readText').should('equal', 'Current code is: new-code')
+    cy.window().its('navigator.clipboard').invoke('readText').should('equal', 'Please access your VPN credentials at: http://localhost:8444 \nCurrent code is: new-code')
   })
 
   it('Allows admin to edit config', () => {
