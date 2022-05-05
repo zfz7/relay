@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import {getLogs} from "../exchange/GetLogs";
 import {CodeCard} from "./CodeCard";
+import {ConfigCard} from "./ConfigCard";
 
 export const AdminPage: React.FC = () => {
   const [peers, setPeers] = useState<Peers>()
@@ -29,6 +30,7 @@ export const AdminPage: React.FC = () => {
         <Grid sx={{mt: '1rem'}} container direction="row" spacing={2}>
           <Grid item md={4} xs={12}>
             <CodeCard/>
+            <ConfigCard/>
             <Card sx={{backgroundColor: theme.palette.primary.light, mt: '1rem'}} raised data-testid="activeUsers">
               <CardContent>
                 <Typography>Active users</Typography>

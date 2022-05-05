@@ -4,6 +4,7 @@ import {AdminPage} from "./AdminPage";
 import {getPeers} from "../exchange/GetPeers";
 import {getLogs} from "../exchange/GetLogs";
 import {act} from "react-dom/test-utils";
+import {getConfig} from "../exchange/GetConfig";
 
 jest.mock('../exchange/GetPeers')
 const getPeersMock = getPeers as jest.MockedFunction<typeof getPeers>
@@ -11,9 +12,16 @@ const getPeersMock = getPeers as jest.MockedFunction<typeof getPeers>
 jest.mock('../exchange/GetLogs')
 const getLogsMock = getLogs as jest.MockedFunction<typeof getLogs>
 
+jest.mock('../exchange/GetConfig')
+const getConfigMock = getConfig as jest.MockedFunction<typeof getConfig>
+
 describe('AdminPage', () => {
 
   beforeEach(() => {
+    getConfigMock.mockResolvedValue({
+      disableLogs: true,
+      clientValidDuration: 180
+    })
     getPeersMock.mockResolvedValue({
       peers: [{
         expiration: new Date("10 October 2011 14:48"),

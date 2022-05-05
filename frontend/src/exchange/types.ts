@@ -44,3 +44,8 @@ export interface PeerRemovedEvent {
 export interface Code {
   code: string,
 }
+
+export interface Config {
+  disableLogs: boolean,
+  clientValidDuration: number
+}

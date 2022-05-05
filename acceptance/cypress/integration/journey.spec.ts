@@ -79,4 +79,25 @@ describe('app', () => {
     cy.findByRole("button",{name: 'copy'}).click()
     cy.window().its('navigator.clipboard').invoke('readText').should('equal', 'Current code is: new-code')
   })
+
+  it('Allows admin to edit config', () => {
+    cy.visit('/admin')
+    cy.findByTestId("configCard").within(() =>{
+      cy.findByPlaceholderText("Client Valid Duration").should('have.value','10')
+      cy.findByRole('checkbox', {name: 'Disable Logs'}).should('not.be.checked')
+      cy.findByText("Edit Config").click()
+
+      cy.findByPlaceholderText("Client Valid Duration").type('{selectAll}20')
+      cy.findByRole('checkbox', {name: 'Disable Logs'}).check()
+
+      cy.findByPlaceholderText("Client Valid Duration").should('have.value','20')
+      cy.findByLabelText("Disable Logs").should('be.checked')
+      cy.findByText("Save Config").click()
+    })
+    cy.visit('/admin')
+    cy.findByTestId("configCard").within(() =>{
+      cy.findByPlaceholderText("Client Valid Duration").should('have.value','20')
+      cy.findByRole('checkbox', {name: 'Disable Logs'}).should('be.checked')
+    })
+  })
 })
