@@ -28,7 +28,7 @@ export const ConfigCard: React.FC = () => {
     <Card sx={{backgroundColor: theme.palette.primary.light, mt: '1rem'}} raised data-testid="configCard">
       <CardContent>
         <Grid container>
-          <Grid item xs={12}><Typography>View/Edit Config</Typography></Grid>
+          <Grid item xs={12}><Typography>Relay Config</Typography></Grid>
           <Grid item xs={12} sx={{mb: "1rem"}}><Divider/></Grid>
           {config && <TextField
               fullWidth
