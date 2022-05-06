@@ -30,6 +30,12 @@ tasks.register<YarnTask>("build") {
   inputs.dir(file("$projectDir/src"))
   outputs.dir(file("$projectDir/build"))
   args.set(listOf("build"))
+  doLast{
+    copy{
+      from(file("$projectDir/build"))
+      into(file("$projectDir/../build/resources/main/static"))
+    }
+  }
 }
 
 

@@ -54,20 +54,14 @@ tasks.withType<Test> {
 }
 
 tasks.withType<BootRun> {
-    dependsOn("copy_frontend_to_backend")
+    dependsOn(":frontend:build")
 }
 
 tasks.withType<BootJar> {
-    dependsOn("copy_frontend_to_backend")
+    dependsOn(":frontend:build")
     archiveBaseName.set("relay")
     archiveFileName.set("relay.jar")
     doLast {
         println(message = "artifact_path: ${outputs.files.files.single()}")
     }
-}
-
-tasks.register<Sync>("copy_frontend_to_backend") {
-    dependsOn(":frontend:build")
-    from(file("${project(":frontend").projectDir}/build"))
-    into(file("$buildDir/resources/main/static"))
 }
