@@ -14,6 +14,9 @@ class StartUp {
   @Autowired
   private lateinit var relayService: RelayService
 
+  @Autowired
+  private lateinit var wgService: WgService
+
   private val logger = LoggerFactory.getLogger(StartUp::class.java)
   @PostConstruct
   fun init() {
@@ -21,5 +24,6 @@ class StartUp {
       relayService.createRelay()
       logger.info("New relay created")
     }
+    wgService.writeRelayConfigFile()
   }
 }
