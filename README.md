@@ -11,7 +11,8 @@ managing their credentials via email/[signal](https://signal.org/) etc...
 
 - [X] Create a simple Web UI to grant new Wiregaurd VPN credentials
 - [X] Create a simple `/admin` control panel with some basic stats and controls
-- [X] Simple deployment process using a generic AWS EC2 instant
+- [X] Simple deployment process using an Ubuntu 20.04 AWS EC2 instant
+- [X] Simple deployment process using an Ubuntu 20.04 Digital Ocean droplet
 - [X] Mange everything from my phone
 
 ## Development Setup
@@ -23,11 +24,11 @@ managing their credentials via email/[signal](https://signal.org/) etc...
 5. Run the app on port 8080 `./gradlew clean bootrun`
 6. Run all tests `./gradlew clean backend:test frontend:test acceptance:test` or `./gradlew clean test`
 
-## Deploy to a single AWS EC2 instance
+## Deploy to a single AWS EC2 instance / Digital Ocean droplet
 
-#### Step 1. create an AWS EC2 instance
+#### Step 1. create an AWS EC2 instance / Digital Ocean droplet
 
-- Create a ubuntu 20.04 LTS EC2 instance
+- Create a ubuntu 20.04 LTS AWS EC2 instance / Digital Ocean droplet
 - Create and associate elastic IP to that instance
 - Point your DNS at that IP address
 - Set up inbound firewall rules:
@@ -80,7 +81,7 @@ relayConfig:
 
 #### Step 5. setup AWS EC2  / Digital Ocean instance
 
-- Run [`./setupVM.sh`](./setupVM.sh) or [`./setupVM.sh DO`](./setupVM.sh)on instance 
+- Run [`./setupVM.sh`](./setupVM.sh) or [`./setupVM.sh DO`](./setupVM.sh) on instance 
   - Check the and update to the latest docker compose version
   - `scp -P "$RELAY_SSH_PORT" ./setupVM.sh $RELAY_SSH_USER@$RELAY_URL:~/`
 
