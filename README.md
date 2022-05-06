@@ -78,11 +78,11 @@ relayConfig:
   adminUsers: zfz7 
 ```
 
-#### Step 5. setup AWS EC2 instance
+#### Step 5. setup AWS EC2  / Digital Ocean instance
 
-- Run [`./setupEC2.sh`](./setupEC2.sh) on instance 
+- Run [`./setupVM.sh`](./setupVM.sh) or [`./setupVM.sh DO`](./setupVM.sh)on instance 
   - Check the and update to the latest docker compose version
-  - `scp -P "$RELAY_SSH_PORT" ./setupEC2.sh $RELAY_SSH_USER@$RELAY_URL:~/`
+  - `scp -P "$RELAY_SSH_PORT" ./setupVM.sh $RELAY_SSH_USER@$RELAY_URL:~/`
 
 #### Step 6. create letscrypt cert
 - run `sudo certbot certonly --standalone` then follow prompts

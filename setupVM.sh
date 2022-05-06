@@ -24,7 +24,11 @@ apt-cache policy docker-ce
 apt install docker-ce -y
 
 #Install Docker-compose
-DOCKER_CONFIG=/home/ubuntu/.docker
+if [ "$1" == 'DO' ]; then
+	DOCKER_CONFIG=/root/.docker
+else
+	DOCKER_CONFIG=/home/ubuntu/.docker
+fi
 mkdir -p $DOCKER_CONFIG/cli-plugins
 curl -SL https://github.com/docker/compose/releases/download/v2.4.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
 chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
