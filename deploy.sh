@@ -13,7 +13,7 @@ ssh $sshHost "sudo apt update"
 ssh $sshHost "sudo apt upgrade -y"
 ssh $sshHost "sudo apt autoremove -y"
 ssh $sshHost "sudo killall java" || echo "No Java process running"
-ssh $sshHost "sudo shutdown -r now"
+ssh $sshHost "sudo shutdown -r now"  || echo "System shutdown"
 
 ##Build App
 if [ "$1" == 'NOTEST' ]; then
