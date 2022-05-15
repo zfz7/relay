@@ -1,8 +1,8 @@
 plugins {
-	val kotlinVersion = "1.6.10"
+	val kotlinVersion = "1.6.21"
 	val springBootVersion = "2.6.7"
 	val springDependencyManagementVersion = "1.0.11.RELEASE"
-	val nodePluginVersion = "3.1.0"
+	val nodePluginVersion = "3.3.0"
 
 	kotlin("jvm") version kotlinVersion apply false
 	kotlin("kapt") version kotlinVersion apply false
