@@ -7,6 +7,12 @@ git diff-index --quiet HEAD --
 
 sshHost="-p $RELAY_SSH_PORT -C $RELAY_SSH_USER@$RELAY_URL"
 scpHost="$RELAY_SSH_USER@$RELAY_URL"
+##Build App
+if [ "$1" == 'NOTEST' ]; then
+	./gradlew clean build -x test
+else
+	./gradlew clean test build
+fi
 
 #Update system
 ssh $sshHost "sudo apt update"
@@ -15,12 +21,6 @@ ssh $sshHost "sudo apt autoremove -y"
 ssh $sshHost "sudo killall java" || echo "No Java process running"
 ssh $sshHost "sudo shutdown -r now"  || echo "System shutdown"
 
-##Build App
-if [ "$1" == 'NOTEST' ]; then
-	./gradlew clean build -x test
-else
-	./gradlew clean test build
-fi
 
 #Wait for host to come back online
 until [ "$(ssh $sshHost "echo ok")" = "ok" ]; do
