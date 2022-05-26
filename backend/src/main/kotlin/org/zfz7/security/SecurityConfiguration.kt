@@ -1,16 +1,18 @@
 package org.zfz7.security
 
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Profile
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.web.SecurityFilterChain
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 
 @EnableWebSecurity
 @Profile("!integration")
-class SecurityConfiguration : WebSecurityConfigurerAdapter() {
-
-  override fun configure(http: HttpSecurity) {
+class SecurityConfiguration {
+  @Bean
+  fun filterChain(http: HttpSecurity): SecurityFilterChain {
     http.csrf().disable()
       .authorizeRequests()
       .antMatchers("/admin").authenticated()
@@ -20,16 +22,18 @@ class SecurityConfiguration : WebSecurityConfigurerAdapter() {
       .antMatchers("/api/**").permitAll()
       .and()
       .oauth2Login()
+    return http.build()
   }
 }
 
 @EnableWebSecurity
 @Profile("integration")
-class SecurityIntegrationConfiguration : WebSecurityConfigurerAdapter() {
-
-  override fun configure(http: HttpSecurity) {
+class SecurityIntegrationConfiguration : WebMvcConfigurer {
+  @Bean
+  fun filterChain(http: HttpSecurity): SecurityFilterChain {
     http.csrf().disable()
       .authorizeRequests()
       .anyRequest().permitAll()
+    return http.build()
   }
 }
