@@ -33,15 +33,15 @@ export const ConfigCard: React.FC = () => {
           {config && <TextField
               fullWidth
               type="number"
-              inputProps={{ min: "0", step: "1" }}
+              inputProps={{min: "0", step: "1"}}
               placeholder="Client Valid Duration"
               label="Client Valid Duration"
-              value={config.clientValidDuration}
+              value={config.clientValidDuration.toString()}
               onChange={(event) =>
                 setConfig(prev => ({...prev!, clientValidDuration: +event.target.value}))}
               disabled={mode !== 'EDIT'}/>}
           {config && <FormControlLabel
-              sx={{m:"1rem 0 0 0"}}
+              sx={{m: "1rem 0 0 0"}}
               labelPlacement="start"
               control={<Switch
                 onChange={(event) =>
