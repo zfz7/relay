@@ -1,7 +1,0 @@
-{
-  "baseUrl": "http://localhost:8444",
-  "chromeWebSecurity": false,
-  "experimentalFetchPolyfill": true,
-  "screenshotOnRunFailure": false,
-  "video": false
-}
