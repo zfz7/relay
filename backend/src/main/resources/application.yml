@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/relay
+    url: jdbc:postgresql://localhost:5434/relay
     username: relay
     password: relay
   jpa:
