@@ -38,8 +38,10 @@ describe('CodeCard', () => {
     await act(async () => {
       await getCodeMock
     })
-    screen.getByRole('button', {name: 'edit'}).click()
-    userEvent.type(screen.getByPlaceholderText('code'), 'new-code')
+    await act(async () => {
+      await screen.getByRole('button', {name: 'edit'}).click()
+    })
+    await userEvent.type(screen.getByPlaceholderText('code'), 'new-code')
     screen.getByRole('button', {name: 'save'}).click()
     await act(async () => {
       await updateCodeMock

@@ -29,14 +29,14 @@ describe('PeerCreation', () => {
 
   it('creates new peer once user clicks connect button', async () => {
     render(<HomePage/>)
-    userEvent.type(screen.getByPlaceholderText('code'), 'code')
-    userEvent.click(screen.getByText("create"))
+    await userEvent.type(screen.getByPlaceholderText('code'), 'code')
+    await userEvent.click(screen.getByText("create"))
     await act(async () => {
       await createPeerMock
     })
     expect(createPeerMock).toHaveBeenCalledWith({code:"code"})
 
-    userEvent.click(screen.getByText("download"))
+    await userEvent.click(screen.getByText("download"))
     await act(async () => {
       await downloadPeerMock
     })
@@ -46,8 +46,8 @@ describe('PeerCreation', () => {
   it('shows error when code is bad', async () => {
     createPeerMock.mockRejectedValue("")
     render(<HomePage/>)
-    userEvent.type(screen.getByPlaceholderText('code'), 'bad code')
-    userEvent.click(screen.getByText("create"))
+    await userEvent.type(screen.getByPlaceholderText('code'), 'bad code')
+    await userEvent.click(screen.getByText("create"))
     await act(async () => {
       await createPeerMock
     })

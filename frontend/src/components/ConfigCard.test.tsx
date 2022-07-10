@@ -38,16 +38,19 @@ describe('ConfigCard', () => {
     await act(async () => {
       await getConfigMock
     })
-    screen.getByText("Edit Config").click()
-    userEvent.type(screen.getByPlaceholderText('Client Valid Duration'), '9')
-    userEvent.click(screen.getByRole('checkbox', {name: 'Disable Logs'}))
+    await act(async () => {
+      await screen.getByText("Edit Config").click()
+    })
+    await userEvent.type(screen.getByPlaceholderText('Client Valid Duration'), '9')
+    await userEvent.click(screen.getByRole('checkbox', {name: 'Disable Logs'}))
 
     const expiration = screen.getByPlaceholderText('Client Valid Duration');
     expect((expiration as HTMLInputElement).value).toEqual('1809');
     const disableLogs = screen.getByRole('checkbox', {name: 'Disable Logs'});
     expect(disableLogs).not.toBeChecked()
-    screen.getByText("Save Config").click()
-
+    await act(async () => {
+      screen.getByText("Save Config").click()
+    })
     await act(async () => {
       await updateConfigMock
     })

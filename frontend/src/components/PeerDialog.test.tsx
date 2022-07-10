@@ -25,13 +25,13 @@ describe('PeerCreation', () => {
   it('it calls on cancel', async () => {
     const onClose = jest.fn()
     render(<PeerDialog peer={peer} open={true} onClose={onClose}/>);
-    userEvent.click(screen.getByText("cancel"))
+    await userEvent.click(screen.getByText("cancel"))
     expect(onClose).toHaveBeenCalledTimes(1)
   })
   it('it calls onConfirm', async () => {
     const onClose = jest.fn()
     render(<PeerDialog peer={peer} open={true} onClose={onClose}/>);
-    userEvent.click(screen.getByText("download"))
+    await userEvent.click(screen.getByText("download"))
     expect(downloadPeerMock).toHaveBeenCalledTimes(1)
   })
 })
