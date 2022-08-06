@@ -84,7 +84,7 @@ class PeerService(
     )
   }
 
-  @Scheduled(cron = "0 0 12 * * ?")//Every day at 12
+  @Scheduled(fixedRate=60*60*1000)//Every hour
   fun removeExpiredPeers() {
     val now = Instant.now()
     val peersToRemove = peerRepository.findAll().filter { it.expiration.isBefore(now) }
