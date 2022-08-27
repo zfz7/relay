@@ -2,7 +2,7 @@
 
 Relay provides a simple web UI, to distribute [Wiregaurd](https://www.wireguard.com) credentials based off of a
 preshared code. It also provides a very simple management panel at `/admin` to see basic info about the service. A live
-demo of the project can be found [here](https://relay-demo.zfz7.org).
+demo of the project can be found [here](https://relay-demo.zfz7.org). Password is `test1`
 
 For the last decade I have been running various VPN services for family and friends, and have grown tired of manually
 managing their credentials via email/[signal](https://signal.org/) etc...
