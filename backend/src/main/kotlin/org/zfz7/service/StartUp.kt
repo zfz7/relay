@@ -1,6 +1,6 @@
 package org.zfz7.service
+import jakarta.annotation.PostConstruct
 import org.slf4j.LoggerFactory
-import javax.annotation.PostConstruct
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component

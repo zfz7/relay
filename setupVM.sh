@@ -15,6 +15,9 @@ super-user-check
 apt update
 apt upgrade -y
 
+#Install java 17
+apt install openjdk-17-jdk
+
 #Install Docker
 apt install apt-transport-https ca-certificates curl software-properties-common -y
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -

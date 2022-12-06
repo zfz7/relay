@@ -1,7 +1,7 @@
 package org.zfz7.domain
 
+import jakarta.persistence.*
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import javax.persistence.*
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
