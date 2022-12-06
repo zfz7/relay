@@ -2,6 +2,7 @@ package org.zfz7.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.within
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -30,6 +31,7 @@ import org.zfz7.repository.LogEventRepository
 import org.zfz7.repository.PeerRepository
 import org.zfz7.service.ConfigService
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 @SpringBootTest
@@ -104,7 +106,7 @@ class AdminControllerTest {
 
     val response = objectMapper.readValue(result.response.contentAsByteArray, Peers::class.java)
     assertThat(response.peers).hasSize(1)
-    assertThat(response.peers[0].expiration).isEqualTo(now)
+    assertThat(response.peers[0].expiration).isCloseTo(now,within(1, ChronoUnit.SECONDS) )
     assertThat(response.peers[0].address).isEqualTo("Hello")
 
     assertThat(peerRepository.findAll().size).isEqualTo(1)
